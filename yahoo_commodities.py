@@ -75,7 +75,7 @@ def main():
         print(f"[WARN] No spot data returned for {m} ({SPOT[m]}).")
     spot_df = spot_df[cols]
     # EU number format
-    spot_df.to_csv("output_files/yahoo_spot.csv", float_format="%.6f", sep=";", decimal=",")
+    spot_df.to_csv("API_data_pull/yahoo_spot.csv", float_format="%.6f", sep=";", decimal=",")
     print(f"[OK] yahoo_spot.csv  rows={len(spot_df)} cols={spot_df.shape[1]} -> {list(spot_df.columns)}")
 
     # ---- Futures Nov-2025 .. Nov-2027 (multiple contracts per commodity)
@@ -92,7 +92,7 @@ def main():
     if fut_frames:
         fut_all = pd.concat(fut_frames, axis=1).sort_index()
         # EU number format
-        fut_all.to_csv("output_files/yahoo_futures.csv", float_format="%.6f", sep=";", decimal=",")
+        fut_all.to_csv("API_data_pull/yahoo_futures.csv", float_format="%.6f", sep=";", decimal=",")
         print(f"[OK] yahoo_futures.csv rows={len(fut_all)} cols={fut_all.shape[1]}")
     else:
         print("[WARN] No futures retrieved for the specified range.")
