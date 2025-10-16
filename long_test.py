@@ -2,6 +2,7 @@
 This script scrapes multiple pages of car listings, extracts data from a structured
 JSON-LD block embedded in the page, and saves the results to CSV file.
 """
+#%% Cell 1
 import time
 import json
 import csv
@@ -14,6 +15,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
+#%% Cell 2
 # --- 1. CONFIGURATION & CONSTANTS ---
 TARGET_COUNT = 500
 OUTPUT_FILENAME = "autoscout_data_final.csv"
@@ -29,7 +31,7 @@ logging.basicConfig(
     ]
 )
 
-
+#%% Cell 3
 # --- 2. HELPER FUNCTIONS ---
 
 def extract_power_mode(fuel_type_text: str) -> str:
@@ -47,7 +49,7 @@ def extract_power_mode(fuel_type_text: str) -> str:
         return "Hybrid"
     return "N/A"
 
-
+#%% Cell 4
 def scrape_page(driver) -> List[Dict]:
     """Extracts all listing data from the current page's structured JSON data."""
     listings_data = []
@@ -86,7 +88,7 @@ def scrape_page(driver) -> List[Dict]:
         logging.error(f"   Error processing JSON data: {e}")
     return listings_data
 
-
+#%% Cell 5
 def navigate_to_next_page(driver) -> bool:
     """Navigates to the next page and waits for it to be ready."""
     try:
@@ -117,7 +119,7 @@ def navigate_to_next_page(driver) -> bool:
         logging.error(f"   An unexpected error occurred during pagination: {e}")
         return False
 
-
+#%% Cell 6
 def save_to_csv(data: List[Dict], filename: str):
     """Saves the collected data to CSV file."""
     if not data:
@@ -135,7 +137,7 @@ def save_to_csv(data: List[Dict], filename: str):
     except Exception as e:
         logging.error(f"   ❌ Failed to save data to CSV: {e}")
 
-
+#%% Cell 7
 # --- 3. MAIN SCRAPER ORCHESTRATION ---
 
 # In your long_test.py file, replace the entire run_scraper function
@@ -174,7 +176,7 @@ def run_scraper():
         driver.refresh()
         WebDriverWait(driver, 15).until(lambda d: d.execute_script("return document.readyState") == "complete")
         logging.info("   ✅ Page is ready.")
-
+# %% Cell 8
         # Main scraping loop
         while len(all_collected_data) < TARGET_COUNT:
             page_count += 1
@@ -209,7 +211,7 @@ def run_scraper():
             logging.info("--- Closing browser... ---")
             driver.quit()
             logging.info("   ✅ Browser closed.")
-
+# %% Cell 9
 # --- 4. EXECUTION ---
 
 if __name__ == "__main__":
