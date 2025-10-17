@@ -1,8 +1,8 @@
 # yahoo_commodities.py
 # Requires: pip install yfinance pandas
 # Outputs (EU format: sep=';', decimal=','):
-#   - yahoo_spot.csv     (WTI, Copper, Lithium, Aluminium, Steel; since 2011-01-01)
-#   - yahoo_futures.csv  (monthly contracts Nov-2025..Nov-2027; columns prefixed by commodity)
+#   - yahoo_spot.csv     (WTI, Copper, Lithium, Aluminium, Steel, Nickel, Cobalt; since 2011-01-01)
+#   - yahoo_futures.csv  (3 contracts per commodity: Mar-2026, Nov-2026, Nov-2027; from 2022 onwards)
 
 import datetime as dt
 from typing import Dict, List, Tuple
@@ -10,14 +10,17 @@ import pandas as pd
 import yfinance as yf
 
 START_DATE = "2011-01-01"
+FUTURES_START_DATE = "2022-01-01"  # Limit futures data to 2022 onwards
 
-# Spot tickers (Yahoo continuous/front contracts)
+# Spot tickers (Yahoo continuous/front contracts and proxies)
 SPOT = {
     "WTI_Spot": "CL=F",      # WTI Crude
     "Copper_Spot": "HG=F",   # COMEX Copper
-    "Lithium_Spot": "LTH=F", # Lithium Hydroxide CIF CJK (Fastmarkets) - may be unavailable in some regions
+    "Lithium_Spot": "LIT",   # Global X Lithium & Battery Tech ETF (proxy for lithium prices)
     "Aluminium_Spot": "ALI=F",
     "Steel_Spot": "HRC=F",   # U.S. Midwest HRC (CRU) Index futures (continuous)
+    "Nickel_Spot": "^SPGSIK", # S&P GSCI Nickel Index (proxy)
+    "Cobalt_Spot": "NICMF",  # Nickel Industries Limited (produces nickel & cobalt; proxy)
 }
 
 # Futures roots & exchanges to build individual-month tickers
@@ -27,27 +30,25 @@ FUTURES_SPECS: Dict[str, Tuple[str, str]] = {
     "Copper": ("HG", "CMX"),       # e.g., HGZ25.CMX
     "Aluminium": ("ALI", "CMX"),   # e.g., ALIZ25.CMX (if unavailable, will be empty)
     "Steel": ("HRC", "CMX"),       # e.g., HRCZ25.CMX
-    "Lithium": ("LTH", "CME"),     # many regions won’t have per-month LTH on Yahoo
+    "Lithium": ("LTH", "CME"),     # many regions won't have per-month LTH on Yahoo
 }
 
-RANGE_START = (2025, 11)  # Nov 2025
-RANGE_END   = (2027, 11)  # Nov 2027
+# Specific contract months (year, month)
+SPECIFIC_CONTRACTS = [
+    (2026, 3),   # March 2026
+    (2026, 11),  # November 2026
+    (2027, 11),  # November 2027
+]
 
 MONTH_CODE = {1:"F",2:"G",3:"H",4:"J",5:"K",6:"M",7:"N",8:"Q",9:"U",10:"V",11:"X",12:"Z"}
 
-def gen_contracts(root: str, exch: str, y0: int, m0: int, y1: int, m1: int) -> List[str]:
+def gen_contracts(root: str, exch: str, contracts_list: List[Tuple[int, int]]) -> List[str]:
+    """Generate contract tickers for specific (year, month) tuples."""
     out = []
-    cur = dt.date(y0, m0, 1)
-    end = dt.date(y1, m1, 1)
-    while cur <= end:
-        code = MONTH_CODE[cur.month]
-        yy = f"{cur.year % 100:02d}"
+    for year, month in contracts_list:
+        code = MONTH_CODE[month]
+        yy = f"{year % 100:02d}"
         out.append(f"{root}{code}{yy}.{exch}")
-        # next month
-        if cur.month == 12:
-            cur = dt.date(cur.year + 1, 1, 1)
-        else:
-            cur = dt.date(cur.year, cur.month + 1, 1)
     return out
 
 def yf_close(tickers: List[str], start: str) -> pd.DataFrame:
@@ -78,11 +79,11 @@ def main():
     spot_df.to_csv("API_data_pull/yahoo_spot.csv", float_format="%.6f", sep=";", decimal=",")
     print(f"[OK] yahoo_spot.csv  rows={len(spot_df)} cols={spot_df.shape[1]} -> {list(spot_df.columns)}")
 
-    # ---- Futures Nov-2025 .. Nov-2027 (multiple contracts per commodity)
+    # ---- Futures for specific contracts only (March 2026, Nov 2026, Nov 2027) - LIMITED TO 2022 ONWARDS
     fut_frames = []
     for label, (root, exch) in FUTURES_SPECS.items():
-        contracts = gen_contracts(root, exch, RANGE_START[0], RANGE_START[1], RANGE_END[0], RANGE_END[1])
-        df = yf_close(contracts, START_DATE)
+        contracts = gen_contracts(root, exch, SPECIFIC_CONTRACTS)  # Pass SPECIFIC_CONTRACTS
+        df = yf_close(contracts, FUTURES_START_DATE)
         if df.empty:
             print(f"[WARN] No futures data for {label} (root={root}.{exch}) — skipping.")
             continue
@@ -93,7 +94,7 @@ def main():
         fut_all = pd.concat(fut_frames, axis=1).sort_index()
         # EU number format
         fut_all.to_csv("API_data_pull/yahoo_futures.csv", float_format="%.6f", sep=";", decimal=",")
-        print(f"[OK] yahoo_futures.csv rows={len(fut_all)} cols={fut_all.shape[1]}")
+        print(f"[OK] yahoo_futures.csv rows={len(fut_all)} cols={fut_all.shape[1]} (Mar-2026, Nov-2026, Nov-2027; data from {FUTURES_START_DATE} onwards)")
     else:
         print("[WARN] No futures retrieved for the specified range.")
 
