@@ -14,10 +14,18 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
+logging.basicConfig(
+    level=logging.DEBUG,  # Change from INFO to DEBUG
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('scraper.log'),
+        logging.StreamHandler()
+    ]
+)
 
 #%% Cell 2
 # --- 1. CONFIGURATION & CONSTANTS ---
-TARGET_COUNT = 500
+TARGET_COUNT = 1
 OUTPUT_FILENAME = "autoscout_data_final.csv"
 START_URL = "https://www.autoscout24.ch/de/autos/alle-marken"
 
@@ -92,112 +100,105 @@ def scrape_page(driver) -> List[Dict]:
     return listings_data
 #%% Cell 5
 def scrape_page_2(driver) -> List[Dict]:
-    """
-    Extracts production_date, consumption_l_per_100km, and transmission
-    from the DOM using icon <svg><title>…</title></svg> anchors.
-
-    Returns a list of dicts with keys:
-      - listing_url: canonical URL (from anchor href in the DOM)
-      - production_date: string like '09.2022' or 'N/A'
-      - consumption_l_per_100km: float (e.g., 13.4) or 'N/A'
-      - transmission: normalized string ('Automat', 'Manuell', or raw variant)
-      - raw_values: dict of raw extracted strings for debugging
-    """
     results: List[Dict] = []
 
-    try:
-        # Each listing container
-        containers = driver.find_elements(By.CSS_SELECTOR, "div.chakra-stack.css-5cam7h")
-        if not containers:
-            containers = driver.find_elements(By.CSS_SELECTOR, "div.chakra-stack")
-    except Exception as e:
-        logging.warning(f"scrape_page_2: could not locate containers: {e}")
-        containers = []
+    # We'll create one result per listing URL we find
+    listing_data_map = {}
+
+    import re
 
     def _normalize_transmission(raw: str) -> str:
         if not raw:
             return "N/A"
         txt = raw.strip().lower()
-        # German and English variants
         if any(k in txt for k in ("automat", "automatic", "automatik", "automatikgetriebe")):
             return "Automat"
         if any(k in txt for k in ("manuell", "manual", "schalt", "schaltgetriebe")):
             return "Manuell"
-        if "halbautomatisches" in txt or "halbautomatik" in txt:
+        if any(k in txt for k in ("halbautomatisches", "halbautomatik", "halbautomatikgetriebe")):
             return "Halbautomatik"
         return raw.strip()
 
-    import re
-    for idx, container in enumerate(containers):
+    def extract_value_by_icon_title(icon_title):
+        """Extract value for a given icon title from anywhere on the page"""
         try:
-            listing_url = None
-            prod_date = "N/A"
-            consumption_val = "N/A"
-            transmission = "N/A"
-            raw_vals = {"production_raw": None, "consumption_raw": None,
-                        "transmission_raw": None, "listing_href": None}
+            # Find ALL elements with this icon title on the page
+            elements = driver.find_elements(By.XPATH, f"//svg[.//title[text()='{icon_title}']]")
+            logging.info(f"Found {len(elements)} elements for {icon_title}")
 
-            # Try to extract a stable listing URL from anchor
-            try:
-                link_el = container.find_element(By.XPATH, ".//a[@href]")
-                href = link_el.get_attribute('href')
-                if href and "/de/d/" in href:  # heuristic: listing pages contain /de/d/
-                    listing_url = href.split("?")[0]  # strip tracking params
-                    raw_vals["listing_href"] = listing_url
-            except Exception:
-                pass
-
-            # Helper: find <svg><title>…</title></svg> and its adjacent <p>
-            def _extract_after_svg_title(svg_title_text: str) -> Optional[str]:
+            values = []
+            for element in elements:
                 try:
-                    svg = container.find_element(
-                        By.XPATH, f".//svg[./title[contains(normalize-space(), '{svg_title_text}')]]"
-                    )
-                    # Prefer sibling <p>
-                    try:
-                        p = svg.find_element(By.XPATH, "./parent::*/following-sibling::p[1]")
-                    except Exception:
-                        p = svg.find_element(By.XPATH, "./following::p[1]")
-                    return p.text.strip() if p.text else None
-                except Exception:
-                    return None
+                    # Get the parent div and then the p tag
+                    parent_div = element.find_element(By.XPATH, "./parent::div")
+                    p_tag = parent_div.find_element(By.XPATH, ".//p")
+                    value = (p_tag.text or "").strip()
+                    if value and value != "-":
+                        values.append(value)
+                        logging.info(f"Extracted '{value}' for {icon_title}")
+                except Exception as e:
+                    logging.debug(f"Could not extract value for {icon_title}: {e}")
+                    continue
 
-            # Production date
-            raw_prod = _extract_after_svg_title("Calendar")
-            if raw_prod:
-                prod_date = raw_prod
-                raw_vals["production_raw"] = raw_prod
-
-            # Consumption
-            raw_cons = _extract_after_svg_title("Consumption")
-            if raw_cons:
-                raw_vals["consumption_raw"] = raw_cons
-                m = re.search(r"([\d\.,]+)", raw_cons)
-                if m:
-                    num = m.group(1).replace(",", ".")
-                    try:
-                        consumption_val = float(num)
-                    except Exception:
-                        consumption_val = "N/A"
-
-            # Transmission
-            raw_trans = _extract_after_svg_title("Transmission")
-            if raw_trans:
-                raw_vals["transmission_raw"] = raw_trans
-                transmission = _normalize_transmission(raw_trans)
-
-            results.append({
-                "listing_url": listing_url or f"dom_idx_{idx}",
-                "production_date": prod_date,
-                "consumption_l_per_100km": consumption_val,
-                "transmission": transmission,
-                # "raw_values": raw_vals
-            })
-
+            return values
         except Exception as e:
-            logging.warning(f"scrape_page_2: failed for container idx {idx}: {e}")
-            continue
+            logging.info(f"Error finding {icon_title}: {e}")
+            return []
 
+    # First, find ALL listing URLs on the page
+    try:
+        listing_links = driver.find_elements(By.XPATH, "//a[contains(@href, '/de/d/')]")
+        listing_urls = []
+        for link in listing_links:
+            href = link.get_attribute('href')
+            if href and "/de/d/" in href:
+                clean_url = href.split("?")[0]
+                if clean_url not in listing_urls:
+                    listing_urls.append(clean_url)
+
+        logging.info(f"Found {len(listing_urls)} unique listing URLs")
+
+        # Initialize data for each listing
+        for url in listing_urls:
+            listing_data_map[url] = {
+                "listing_url": url,
+                "production_date": "N/A",
+                "consumption_l_per_100km": "N/A",
+                "transmission": "N/A"
+            }
+
+    except Exception as e:
+        logging.warning(f"Could not find listing URLs: {e}")
+        return []
+
+    # Now extract values for each icon type
+    calendar_values = extract_value_by_icon_title("Calendar icon")
+    consumption_values = extract_value_by_icon_title("Consumption icon")
+    transmission_values = extract_value_by_icon_title("Transmission icon")
+
+    logging.info(
+        f"Extracted: {len(calendar_values)} dates, {len(consumption_values)} consumption, {len(transmission_values)} transmission")
+
+    # Match values to listings (assuming order matches)
+    for i, url in enumerate(listing_urls):
+        if i < len(calendar_values):
+            listing_data_map[url]["production_date"] = calendar_values[i]
+        if i < len(consumption_values):
+            # Parse consumption value
+            raw_cons = consumption_values[i]
+            m = re.search(r"([\d\.,]+)", raw_cons)
+            if m:
+                num = m.group(1).replace(",", ".")
+                try:
+                    val = float(num)
+                    listing_data_map[url]["consumption_l_per_100km"] = val if 1 <= val <= 50 else "N/A"
+                except:
+                    listing_data_map[url]["consumption_l_per_100km"] = "N/A"
+        if i < len(transmission_values):
+            listing_data_map[url]["transmission"] = _normalize_transmission(transmission_values[i])
+
+    # Convert to results list
+    results = list(listing_data_map.values())
     logging.info(f"scrape_page_2: extracted {len(results)} DOM/icon entries from page.")
     return results
 
@@ -251,7 +252,8 @@ def save_to_csv(data: List[Dict], filename: str):
                 # NEW columns:
                 'production_date',
                 'consumption_l_per_100km',
-                'transmission'
+                'transmission',
+                'listing_url'
                 # Optional debug column:
                 #'raw_values'
             ]
@@ -301,7 +303,10 @@ def run_scraper():
         driver.refresh()
         WebDriverWait(driver, 15).until(lambda d: d.execute_script("return document.readyState") == "complete")
         logging.info("   ✅ Page is ready.")
+
 # %% Cell 9
+
+# %% Cell 10
         # Main scraping loop
         while len(all_collected_data) < TARGET_COUNT:
             page_count += 1
@@ -377,7 +382,7 @@ def run_scraper():
             logging.info("--- Closing browser... ---")
             driver.quit()
             logging.info("   ✅ Browser closed.")
-# %% Cell 10
+# %% Cell 11
 # --- 4. EXECUTION ---
 
 if __name__ == "__main__":
