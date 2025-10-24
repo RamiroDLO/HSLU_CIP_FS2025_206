@@ -1,21 +1,101 @@
 car_model,price_chf,mileage,engine_power_hp,power_mode,production_date,consumption_l_per_100km,transmission,listing_url
-MERCEDES-BENZ GLE 63 S AMG 4matic+ / Panorama / HeadUp / Burmester,85780,61500,612,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/mercedes-benz-gle-63-s-amg-4matic-panorama-headup-burmester-12849896
-MERCEDES-BENZ S 400 d L AMG Line 9G-Tronic *MAYBACH 1 of 1*Nardo Grau*,104880,46000,330,Diesel,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/mercedes-benz-s-400-d-l-amg-line-9g-tronic-maybach-1-of-1-nardo-grau-12850421
-VW Touareg 3.0 TSIe Hybrid Atmosphere 4x4,49900,41000,381,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/vw-touareg-30-tsie-hybrid-atmosphere-4x4-12858038
-BMW X5 M60i xDrive / Panorama / 360° Kamera / Harman/Kardon,89780,29800,530,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/bmw-x5-m60i-xdrive-panorama-360-kamera-harman-kardon-12845609
+BMW X6M Competition (CH) FACELIFT INDIVIDUAL,129900,9749,626,Benzin,01.2024,N/A,Automat,https://www.autoscout24.ch/de/d/bmw-x6m-competition-ch-facelift-individual-12861564
+BMW X3 xDrive 48 20d M Sport Individual / ACC / Head-Up Display,52900,12505,190,Diesel,06.2024,N/A,Automat,https://www.autoscout24.ch/de/d/bmw-x3-xdrive-48-20d-m-sport-individual-acc-head-up-display-12861562
+BMW X7 xDrive 48V M60i M Sport Pro (CH) INDIVIDUAL,114900,21500,530,Benzin,08.2023,N/A,Automat,https://www.autoscout24.ch/de/d/bmw-x7-xdrive-48v-m60i-m-sport-pro-ch-individual-12861561
+VW Golf 2.0 TDI R-Line Aut.,36900,10,150,Diesel,Neues Fahrzeug,N/A,Halbautomatik,https://www.autoscout24.ch/de/d/vw-golf-20-tdi-r-line-aut-12861537
+BMW 520d xDrive 48V M Sport 4x4,52900,23599,197,Diesel,03.2024,N/A,Automat,https://www.autoscout24.ch/de/d/bmw-520d-xdrive-48v-m-sport-4x4-12860597
+CUPRA Terramar 2.0TSI DSG 4D VZ 4x4 PANORAMADACH / HEAD UP DISPLAY,39900,12999,265,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/cupra-terramar-20tsi-dsg-4d-vz-4x4-panoramadach-head-up-display-12859093
+PEUGEOT 2008 1.2 PureTech Allure FACELIFT Aut. 360° Kamera / Totwinkelassistent / Apple Car Play,22900,10,130,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/peugeot-2008-12-puretech-allure-facelift-aut-360-kamera-totwinkelassistent-apple-car-play-12859092
+BMW M850i xDrive HAMANN 4x4,69900,40922,530,Benzin,05.2021,N/A,Automat,https://www.autoscout24.ch/de/d/bmw-m850i-xdrive-hamann-4x4-12859091
+BMW M4 Cabrio Competition M xDrive CURVED DISPLAY! Keramikbremsen / Driving Assistant Professional,82900,31490,510,Benzin,03.2024,N/A,Halbautomatik,https://www.autoscout24.ch/de/d/bmw-m4-cabrio-competition-m-xdrive-curved-display-keramikbremsen-driving-assistant-professional-12859090
+MERCEDES-BENZ EQB 350 AMG Line 4Matic 4x4 (CH),52900,10,292,Elektro,Neues Fahrzeug,N/A,Automat,https://www.autoscout24.ch/de/d/mercedes-benz-eqb-350-amg-line-4matic-4x4-ch-12859089
+MERCEDES-BENZ EQB 350 AMG Line 4Matic 4x4 (CH),49900,19,292,Elektro,Neues Fahrzeug,N/A,Automat,https://www.autoscout24.ch/de/d/mercedes-benz-eqb-350-amg-line-4matic-4x4-ch-12861838
+MERCEDES-BENZ S 400 d L 4M AMG Line 9G (CH) S63 AMG LOOK FAB DESIGN,89900,56900,330,Diesel,04.2021,N/A,Automat,https://www.autoscout24.ch/de/d/mercedes-benz-s-400-d-l-4m-amg-line-9g-ch-s63-amg-look-fab-design-12861837
+MERCEDES-BENZ GLC Coupé 63 S AMG Edition 1 4Matic+ (CH) Keramik Carbon,64900,56900,510,Benzin,05.2018,10.7,Automat,https://www.autoscout24.ch/de/d/mercedes-benz-glc-coupe-63-s-amg-edition-1-4matic-ch-keramik-carbon-12861835
+BMW X7 xDrive 48 40d M Sport Pro (CH) INDIVIDUAL,99900,13500,340,Diesel,04.2024,N/A,Automat,https://www.autoscout24.ch/de/d/bmw-x7-xdrive-48-40d-m-sport-pro-ch-individual-12861833
+BMW i7 xDrive 60 (CH) Individual,79900,63900,544,Elektro,05.2023,N/A,Automat,https://www.autoscout24.ch/de/d/bmw-i7-xdrive-60-ch-individual-12861832
+BMW X3 xDrive 48V 30d M Sport,55900,14901,285,Diesel,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/bmw-x3-xdrive-48v-30d-m-sport-12861831
+VOLVO S60 T8 e AWD Hybrid Ultimate Bright 4x4,49900,1451,455,Benzin,09.2024,N/A,Automat,https://www.autoscout24.ch/de/d/volvo-s60-t8-e-awd-hybrid-ultimate-bright-4x4-12861830
+HYUNDAI i20 1.0 MH Vertex DCT (CH) Automat,19900,42700,120,Benzin,05.2022,5.5,Automat,https://www.autoscout24.ch/de/d/hyundai-i20-10-mh-vertex-dct-ch-automat-12861829
+BMW X3 xDrive M50 48V M Sport Pro 4x4 AHK,69900,9900,398,Benzin,01.2025,N/A,Automat,https://www.autoscout24.ch/de/d/bmw-x3-xdrive-m50-48v-m-sport-pro-4x4-ahk-12861828
+AUDI Q5 SB 40 TDI S line quattro LEASING ANGEBOT FÜR NUR FR. 621 IM MONAT,56900,10,204,Diesel,Neues Fahrzeug,N/A,Halbautomatik,https://www.autoscout24.ch/de/d/audi-q5-sb-40-tdi-s-line-quattro-leasing-angebot-fur-nur-fr-621-im-monat-12861827
+BMW X3 xDrive 48V 30d M Sport,54900,16390,285,Diesel,07.2024,N/A,Automat,https://www.autoscout24.ch/de/d/bmw-x3-xdrive-48v-30d-m-sport-12859088
+ALFA ROMEO Tonale 1.5 48V Hybrid Ti Edition,27900,6350,161,Benzin,04.2024,N/A,Halbautomatik,https://www.autoscout24.ch/de/d/alfa-romeo-tonale-15-48v-hybrid-ti-edition-12859028
+VW Touareg 3.0 TSIe Hybrid Atmosphere 4x4,49900,41000,381,Benzin,06.2023,N/A,Automat,https://www.autoscout24.ch/de/d/vw-touareg-30-tsie-hybrid-atmosphere-4x4-12858038
+BMW X3 xDrive 30i Aut. FACELIFT,49900,34500,245,Benzin,05.2022,N/A,Automat,https://www.autoscout24.ch/de/d/bmw-x3-xdrive-30i-aut-facelift-12859094
 MERCEDES-BENZ C 63 S AMG Facelift,79900,15900,510,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/mercedes-benz-c-63-s-amg-facelift-12853894
 BMW X3 xDrive 30e M Sport / ACC / Head-Up Display,51900,18199,292,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/bmw-x3-xdrive-30e-m-sport-acc-head-up-display-12853893
 BMW X3 xDrive 48 20d M Sport Individual / ACC / Head-Up Display,52900,13900,190,Diesel,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/bmw-x3-xdrive-48-20d-m-sport-individual-acc-head-up-display-12853892
 BMW M850i xDrive HAMANN INDIVIDUAL,69900,48900,530,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/bmw-m850i-xdrive-hamann-individual-12853891
 BMW 520d xDrive 48V M Sport 4x4,53900,19845,197,Diesel,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/bmw-520d-xdrive-48v-m-sport-4x4-12853890
 BMW M4 Cabrio Competition M xDrive (CH) INDIVIDUAL,85900,3229,510,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/bmw-m4-cabrio-competition-m-xdrive-ch-individual-12853889
+BMW M4 Coupé Competition M xDrive FACELIFT,89900,6010,530,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/bmw-m4-coupe-competition-m-xdrive-facelift-12861826
+FERRARI Roma 3.9 V8 T Carbon (CH) NOVITEC Wheels,199900,4999,620,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/ferrari-roma-39-v8-t-carbon-ch-novitec-wheels-12861563
+FERRARI Portofino 3.9 V8 T (CH) Gratisservice + Werksgarantie!,175900,24199,600,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/ferrari-portofino-39-v8-t-ch-gratisservice-werksgarantie-12861560
 BMW 520i M Sport / HeadUp / 4-Zonen Klima / Harman Kardon,51980,17600,190,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/bmw-520i-m-sport-headup-4-zonen-klima-harman-kardon-12856886
 BMW 330i xDrive SAG M Sport / LCI / HeadUp / 360° Kamera,43950,21500,245,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/bmw-330i-xdrive-sag-m-sport-lci-headup-360-kamera-12856856
-AUDI Q3 2.0 45 TFSI S line quattro S-Tronic / CH-Fahrzeug / Panorama-Schiebedach / 360° Kamera,23780,117000,230,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/audi-q3-20-45-tfsi-s-line-quattro-s-tronic-ch-fahrzeug-panorama-schiebedach-360-kamera-12856855
-VW Tiguan 2.0 TDI SCR Highline DSG R-Line / CH-Fahrzeug / HeadUp / 360° Kamera,18780,139800,190,Diesel,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/vw-tiguan-20-tdi-scr-highline-dsg-r-line-ch-fahrzeug-headup-360-kamera-12856854
-MERCEDES-BENZ GLE 53 AMG 4matic+ / Panorama-Schiebedach / 360° Kamera / El. Memory-Sitze,68780,49900,435,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/mercedes-benz-gle-53-amg-4matic-panorama-schiebedach-360-kamera-el-memory-sitze-12849906
+MERCEDES-BENZ S 63 AMG 4Matic (CH) Brabus FAB Desing,125000,27900,612,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/mercedes-benz-s-63-amg-4matic-ch-brabus-fab-desing-12861836
+MERCEDES-BENZ GLE 450 d AMG Line 4Matic 9G-Tronic *Facelift*Werksgarantie*Luftfederung*,81980,5000,367,Diesel,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/mercedes-benz-gle-450-d-amg-line-4matic-9g-tronic-facelift-werksgarantie-luftfederung-12868710
+MERCEDES-BENZ GLC 200 4Matic 9G-Tronic *AMG Line Felgen*Werksgarantie*Facelift*,48980,18000,204,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/mercedes-benz-glc-200-4matic-9g-tronic-amg-line-felgen-werksgarantie-facelift-12868709
+MERCEDES-BENZ A AMG 45 S 4Matic+ 8G-DCT *Facelift*Performance Sitze*Panorama*,49980,40000,421,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/mercedes-benz-a-amg-45-s-4matic-8g-dct-facelift-performance-sitze-panorama-12868698
+"BMW 740d xDrive 48V M Sport Steptronic 22"" Felgen*Werksgarantie*",77980,80000,299,Diesel,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/bmw-740d-xdrive-48v-m-sport-steptronic-22-felgen-werksgarantie-12867984
+BMW M850i xDrive 4x4 Individual,64900,27900,530,Benzin,07.2019,N/A,Automat,https://www.autoscout24.ch/de/d/bmw-m850i-xdrive-4x4-individual-12853888
+MERCEDES-BENZ S 63 AMG 4Matic FACELIFT ST Carbon (CH),125900,42900,612,Benzin,03.2020,11.4,Halbautomatik,https://www.autoscout24.ch/de/d/mercedes-benz-s-63-amg-4matic-facelift-st-carbon-ch-12853887
+BMW X3 xDrive 48V 20d M Sport Individual / ACC / Head-Up Display,52900,13610,190,Diesel,06.2024,N/A,Automat,https://www.autoscout24.ch/de/d/bmw-x3-xdrive-48v-20d-m-sport-individual-acc-head-up-display-12851020
+BMW M850i xDrive (CH) Individual Carbon,69900,24499,530,Benzin,07.2021,N/A,Automat,https://www.autoscout24.ch/de/d/bmw-m850i-xdrive-ch-individual-carbon-12851019
+AUDI RS7 Sportback MHEV Keramik Performance AUDI EXCLUSIVE Sonderfahrzeug,139900,1265,630,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/audi-rs7-sportback-mhev-keramik-performance-audi-exclusive-sonderfahrzeug-12851018
+BMW 520d xDrive 48V M Sport 4x4,54900,15373,197,Diesel,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/bmw-520d-xdrive-48v-m-sport-4x4-12851017
+BMW M4 Coupé Competition M xDrive FACELIFT,89900,7099,530,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/bmw-m4-coupe-competition-m-xdrive-facelift-12851016
+MERCEDES-BENZ S 450 d L 4M AMG Line Premium NEW MODELL ST WHEELS,119900,22499,390,Diesel,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/mercedes-benz-s-450-d-l-4m-amg-line-premium-new-modell-st-wheels-12850072
+OPEL Corsa 1.2 MHEV GS Celebration Aut. NEW MODELL 2025 mit Rückfahrkamera,21900,10,100,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/opel-corsa-12-mhev-gs-celebration-aut-new-modell-2025-mit-ruckfahrkamera-12850068
+CUPRA Terramar 2.0TSI DSG 4D VZ 4x4 PANORAMADACH / HEAD UP DISPLAY,39900,10900,265,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/cupra-terramar-20tsi-dsg-4d-vz-4x4-panoramadach-head-up-display-12850067
+MERCEDES-BENZ CLK 500 Elégance Sport Paket (CH) FAB Design Style,35900,42900,388,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/mercedes-benz-clk-500-elegance-sport-paket-ch-fab-design-style-12861559
+"MERCEDES-BENZ E 220 d AMG Line 9G-Tronic *Facelift*21"" Felgen*Werksgarantie*Ambientebeleuchtung*",52980,20000,197,Diesel,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/mercedes-benz-e-220-d-amg-line-9g-tronic-facelift-21-felgen-werksgarantie-ambientebeleuchtung-12866682
+"BMW M235 xDrive Gran Coupé M Sport Pro *Neues Model*Werksgarantie*19"" Felgen*",49990,25000,300,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/bmw-m235-xdrive-gran-coupe-m-sport-pro-neues-model-werksgarantie-19-felgen-12866679
+"BMW M340i xDrive 48V Steptronic M Sport Pro *20"" Felgen*Facelift*Werksgarantie*",57470,13000,374,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/bmw-m340i-xdrive-48v-steptronic-m-sport-pro-20-felgen-facelift-werksgarantie-12866678
 MERCEDES-BENZ CLA 35 AMG 4Matic 8G-DCT *Werksgarantie*Ambientebeleuchtung*,44890,57000,306,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/mercedes-benz-cla-35-amg-4matic-8g-dct-werksgarantie-ambientebeleuchtung-12863703
 "MERCEDES-BENZ GLC 300 4Matic AMG Line 9G-Tronic *21"" Felgen*Werksgarantie*Lenkradheizung*",57980,18000,258,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/mercedes-benz-glc-300-4matic-amg-line-9g-tronic-21-felgen-werksgarantie-lenkradheizung-12863701
 MERCEDES-BENZ A 35 AMG 4Matic 8G-DCT *Werksgarantie*Aerodynamik*Lenkradheizung*,44790,14000,306,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/mercedes-benz-a-35-amg-4matic-8g-dct-werksgarantie-aerodynamik-lenkradheizung-12863695
 "AUDI R8 Coupé 5.2 plus S-Tronic ""CH-Fahrzeug*Carbon*Keramik*Schalensitze*",122890,74000,611,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/audi-r8-coupe-52-plus-s-tronic-ch-fahrzeug-carbon-keramik-schalensitze-12863693
 "MERCEDES-BENZ E 220 d AMG Line 9G-Tronic *21"" Felgen*Werksgarantie*Facelift*Ambientebeleuchtung*",52980,16000,197,Diesel,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/mercedes-benz-e-220-d-amg-line-9g-tronic-21-felgen-werksgarantie-facelift-ambientebeleuchtung-12863689
+BMW 530i xDrive 48V M Sport Steptronic *Sitzbelüftung*Panorama*Harman/Kardon*,45990,36000,252,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/bmw-530i-xdrive-48v-m-sport-steptronic-sitzbeluftung-panorama-harman-kardon-12859540
+MERCEDES-BENZ GLE 63 S AMG 4matic+ / Panorama / HeadUp / Burmester,85780,61500,612,Benzin,12.2021,12.8,Automat,https://www.autoscout24.ch/de/d/mercedes-benz-gle-63-s-amg-4matic-panorama-headup-burmester-12849896
+FERRARI 296 GTB (CH),259900,1590,830,Benzin,03.2025,N/A,Halbautomatik,https://www.autoscout24.ch/de/d/ferrari-296-gtb-ch-12851015
+BMW X3 xDrive 48 20d M Sport Individual / ACC / Head-Up Display,49900,19899,190,Diesel,04.2024,N/A,Automat,https://www.autoscout24.ch/de/d/bmw-x3-xdrive-48-20d-m-sport-individual-acc-head-up-display-12846095
+CITROEN C4 HEV You FACELIFT Aut.,24900,10,136,Benzin,Neues Fahrzeug,N/A,Halbautomatik,https://www.autoscout24.ch/de/d/citroen-c4-hev-you-facelift-aut-12846094
+BMW X3 xDrive 30e M Sport / ACC / Head-Up Display,53900,9479,292,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/bmw-x3-xdrive-30e-m-sport-acc-head-up-display-12846093
+MINI Countryman JCW ALL4 4x4 (CH),47900,18699,300,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/mini-countryman-jcw-all4-4x4-ch-12846092
+RENAULT Arkana 1.6 E-Esprit Alpin 145,28900,10,143,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/renault-arkana-16-e-esprit-alpin-145-12845111
+RENAULT Arkana 1.6 E-Esprit Alpin 145,28900,10,143,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/renault-arkana-16-e-esprit-alpin-145-12845110
+RENAULT Arkana 1.6 E-Esprit Alpin 145,28900,10,143,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/renault-arkana-16-e-esprit-alpin-145-12845109
+BMW M4 Competition xDrive Coupé / LCI Facelift / Head-Up / Harman Kardon,84980,11300,530,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/bmw-m4-competition-xdrive-coupe-lci-facelift-head-up-harman-kardon-12843442
+LAND ROVER Range Rover Velar Dynamic SE D 300 I6 MHEV Automatic *Facelift*Werksgarantie*AHK*,55890,38800,300,Diesel,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/land-rover-range-rover-velar-dynamic-se-d-300-i6-mhev-automatic-facelift-werksgarantie-ahk-12853984
+"AUDI A6 45 TFSI Design quattro S-tronic *Limousine*21"" Felgen*",35880,47000,265,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/audi-a6-45-tfsi-design-quattro-s-tronic-limousine-21-felgen-12853983
+BMW M440i xDrive 48V Cabrio INDIVIDUAL 4x4,59900,21099,374,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/bmw-m440i-xdrive-48v-cabrio-individual-4x4-12861834
+MERCEDES-BENZ A 250 4Matic AMG Line 7G-DCT *Limousine*Facelift*Panorama*,38790,4880,224,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/mercedes-benz-a-250-4matic-amg-line-7g-dct-limousine-facelift-panorama-12853987
+GENESIS G70 2.0 TGDI Sport AT8 AWD *Werksgarantie*Panorama*Sitzbelüftung*,35890,36000,245,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/genesis-g70-20-tgdi-sport-at8-awd-werksgarantie-panorama-sitzbeluftung-12853986
+"AUDI S3 Limousine 2.0 TFSI quattro S-tronic *Werksgarantie*19"" Felgen*",39890,10000,311,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/audi-s3-limousine-20-tfsi-quattro-s-tronic-werksgarantie-19-felgen-12853985
+"MERCEDES-BENZ S 65 AMG Cabriolet Speedshift 7G-Tronic *CH Auto*Designo Magno* 22"" Felgen*",179800,6000,630,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/mercedes-benz-s-65-amg-cabriolet-speedshift-7g-tronic-ch-auto-designo-magno-22-felgen-12853509
+VW Tiguan 2.0 TSI DSG R-Line 4Motion *Facelift*Panorama*Massage*,46380,26000,266,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/vw-tiguan-20-tsi-dsg-r-line-4motion-facelift-panorama-massage-12853481
+HYUNDAI i30 2.0 T-GDi N DCT *Werksgarantie*Panorama*Lenkradheizung*,34890,20000,280,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/hyundai-i30-20-t-gdi-n-dct-werksgarantie-panorama-lenkradheizung-12853478
+CUPRA Ateca 2.0TSI VZ 4Drive DSG *Facelift*Panorama*Schalensitze*,32890,20000,300,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/cupra-ateca-20tsi-vz-4drive-dsg-facelift-panorama-schalensitze-12853475
+VW Golf 2.0 TDI R-Line Aut. Panoramadach,37900,10,150,Diesel,Neues Fahrzeug,N/A,Halbautomatik,https://www.autoscout24.ch/de/d/vw-golf-20-tdi-r-line-aut-panoramadach-12850069
+MERCEDES-BENZ S 400 d L AMG Line 9G-Tronic *MAYBACH 1 of 1*Nardo Grau*,104880,46000,330,Diesel,06.2023,N/A,Automat,https://www.autoscout24.ch/de/d/mercedes-benz-s-400-d-l-amg-line-9g-tronic-maybach-1-of-1-nardo-grau-12850421
+MERCEDES-BENZ GLC 43 AMG Executive Edition 4matic Coupé/ Panorama / Burmester / 360°Kamera,84900,19950,421,Benzin,08.2024,9.6,Automat,https://www.autoscout24.ch/de/d/mercedes-benz-glc-43-amg-executive-edition-4matic-coupe-panorama-burmester-360-kamera-12839571
+BMW X3 xDrive 48 20d M Sport Individual / ACC / Head-Up Display,52900,10570,190,Diesel,06.2024,N/A,Automat,https://www.autoscout24.ch/de/d/bmw-x3-xdrive-48-20d-m-sport-individual-acc-head-up-display-12850071
+BMW M5 xDrive Touring (CH) INDIVIDUAL Ultimate M Driver's Package,139900,5900,727,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/bmw-m5-xdrive-touring-ch-individual-ultimate-m-driver-s-package-12850070
+MERCEDES-BENZ AMG GT 63 S 4matic+ *FACELIFT* / Panoramadach / Rückfahrkamera / Sitzheizung,114950,29900,639,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/mercedes-benz-amg-gt-63-s-4matic-facelift-panoramadach-ruckfahrkamera-sitzheizung-12837716
+BMW X5M Edition Black Fire Steptronic,49900,95500,575,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/bmw-x5m-edition-black-fire-steptronic-12848143
+MERCEDES-BENZ S 560 L 4Matic 9G-Tronic,56900,108500,469,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/mercedes-benz-s-560-l-4matic-9g-tronic-12848149
+BYD Seal U DM-i Design AWD / Panorama / Head-Up Display / 360 Kamera,39580,20,323,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/byd-seal-u-dm-i-design-awd-panorama-head-up-display-360-kamera-12818199
+BYD Seal U DM-i Boost / Panorama / Head-Up Display / 360 Kamera,32800,20,217,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/byd-seal-u-dm-i-boost-panorama-head-up-display-360-kamera-12817534
+"AUDI S5 Sportback 3.0 TDI quattro tiptronic *21"" Felgen*Matrix-LED*Massage*Head-Up*",42980,70000,342,Diesel,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/audi-s5-sportback-30-tdi-quattro-tiptronic-21-felgen-matrix-led-massage-head-up-12853473
+JEEP Wrangler 2.0 Rubicon FACELIFT Aut. 2024,54900,25199,272,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/jeep-wrangler-20-rubicon-facelift-aut-2024-12843214
+AUDI Q5 50 SB TFSI e adv quattro LEASING ANGEBOT FÜR NUR Fr. 580.70 IM MONAT,54900,10,299,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/audi-q5-50-sb-tfsi-e-adv-quattro-leasing-angebot-fur-nur-fr-58070-im-monat-12843211
+LAND ROVER RR Sport P460e Dynamic HSE Black Pack 4x4,119900,50,460,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/land-rover-rr-sport-p460e-dynamic-hse-black-pack-4x4-12846491
+LAND ROVER RR Sport P550e Autobigraphy Black Pack 4x4,129900,1890,551,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/land-rover-rr-sport-p550e-autobigraphy-black-pack-4x4-12846490
+AUDI Q8 TFSI e quattro Competition 4x4 360 kW,109900,50,489,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/audi-q8-tfsi-e-quattro-competition-4x4-360-kw-12846379
+BMW X5 M60i xDrive / Panorama / 360° Kamera / Harman/Kardon,89780,29800,530,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/bmw-x5-m60i-xdrive-panorama-360-kamera-harman-kardon-12845609
+MERCEDES-BENZ A 200 d AMG Line Limousine / Facelift / Rückfahrkamera / Ambientebeleuchtung,34900,37000,150,Diesel,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/mercedes-benz-a-200-d-amg-line-limousine-facelift-ruckfahrkamera-ambientebeleuchtung-12845551
+MERCEDES-BENZ E 53 AMG 4matic+ / Panorama / 360°Kamera / Abstandsregler,58890,45000,435,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/mercedes-benz-e-53-amg-4matic-panorama-360-kamera-abstandsregler-12844362
+BMW X6 40i xDrive / Panorama / 360°Kamera / HeadUp,84780,19250,381,Benzin,N/A,N/A,N/A,https://www.autoscout24.ch/de/d/bmw-x6-40i-xdrive-panorama-360-kamera-headup-12844346
