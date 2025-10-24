@@ -17,7 +17,7 @@ from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from bs4 import BeautifulSoup
 
 # Configuration
-TARGET_COUNT = 30
+TARGET_COUNT = 5000
 OUTPUT_FILENAME = "autoscout_data_complete.csv"
 START_URL = "https://www.autoscout24.ch/de/autos/alle-marken"
 
@@ -101,19 +101,28 @@ def scrape_json_data(driver) -> List[Dict]:
     return listings_data
 
 
-def scrape_html_selenium_dom(driver) -> List[Dict]:
-    """Uses Selenium to find elements in the live DOM (not static HTML)"""
+def scrape_html_dom_navigation(driver) -> List[Dict]:
+    """Uses DOM navigation to find SVG icons and extract adjacent text"""
     results = []
 
     try:
-        logging.info("   Finding articles with Selenium...")
+        logging.info("   Getting page source...")
+        page_source = driver.page_source
+        soup = BeautifulSoup(page_source, 'html.parser')
 
-        # Find all article elements using Selenium
-        articles = driver.find_elements(By.TAG_NAME, "article")
-        logging.info(f"   Found {len(articles)} articles via Selenium")
+        articles = soup.find_all('article')
+        logging.info(f"   Found {len(articles)} articles")
 
         if not articles:
             return []
+
+        # Save first article for debugging
+        try:
+            with open('DEBUG_article_html.html', 'w', encoding='utf-8') as f:
+                f.write(str(articles[0].prettify()))
+            logging.info("   💾 Saved first article HTML to DEBUG_article_html.html")
+        except:
+            pass
 
         for idx, article in enumerate(articles):
             data = {
@@ -125,78 +134,83 @@ def scrape_html_selenium_dom(driver) -> List[Dict]:
 
             # Extract URL
             try:
-                link = article.find_element(By.CSS_SELECTOR, "a[href*='/de/d/']")
-                href = link.get_attribute('href')
-                if href:
+                link = article.find('a', href=re.compile(r'/de/d/'))
+                if link and link.get('href'):
+                    href = link['href']
+                    if not href.startswith('http'):
+                        href = "https://www.autoscout24.ch" + href
                     data["listing_url"] = href.split("?")[0]
             except:
                 pass
 
-            # Find Calendar icon using Selenium
+            # DOM NAVIGATION: Find Calendar icon
             try:
-                # Find SVG with title "Calendar icon" within this article
-                calendar_svg = article.find_element(By.XPATH, ".//svg[.//title[text()='Calendar icon']]")
-                # Get parent div, then find p tag
-                parent_div = calendar_svg.find_element(By.XPATH, "./parent::div")
-                p_tag = parent_div.find_element(By.TAG_NAME, "p")
-                date_text = p_tag.text.strip()
-
-                if 'Neues Fahrzeug' in date_text:
-                    data["production_date"] = "Neues Fahrzeug"
-                else:
-                    date_match = re.search(r'(\d{1,2}\.\d{4})', date_text)
-                    if date_match:
-                        data["production_date"] = date_match.group(1)
-
-                if idx < 3:
-                    logging.info(f"   ✅ Article {idx+1}: Date = '{data['production_date']}'")
-            except NoSuchElementException:
-                if idx < 3:
-                    logging.warning(f"   ❌ Article {idx+1}: Calendar icon not found in DOM")
-            except Exception as e:
-                if idx < 3:
-                    logging.warning(f"   ❌ Article {idx+1}: Date error - {type(e).__name__}: {e}")
-
-            # Find Transmission icon
-            try:
-                trans_svg = article.find_element(By.XPATH, ".//svg[.//title[text()='Transmission icon']]")
-                parent_div = trans_svg.find_element(By.XPATH, "./parent::div")
-                p_tag = parent_div.find_element(By.TAG_NAME, "p")
-                trans_text = p_tag.text.strip()
-                data["transmission"] = normalize_transmission(trans_text)
-
-                if idx < 3:
-                    logging.info(f"   ✅ Article {idx+1}: Trans = '{trans_text}'")
-            except NoSuchElementException:
-                if idx < 3:
-                    logging.warning(f"   ❌ Article {idx+1}: Transmission icon not found in DOM")
-            except Exception as e:
-                if idx < 3:
-                    logging.warning(f"   ❌ Article {idx+1}: Trans error - {type(e).__name__}: {e}")
-
-            # Find Consumption icon
-            try:
-                cons_svg = article.find_element(By.XPATH, ".//svg[.//title[text()='Consumption icon']]")
-                parent_div = cons_svg.find_element(By.XPATH, "./parent::div")
-                p_tag = parent_div.find_element(By.TAG_NAME, "p")
-                cons_text = p_tag.text.strip()
-
-                if cons_text != '-':
-                    cons_match = re.search(r'([\d\.,]+)\s*l/100\s*km', cons_text)
-                    if cons_match:
-                        num_str = cons_match.group(1).replace(',', '.')
-                        try:
-                            val = float(num_str)
-                            if 1 <= val <= 50:
-                                data["consumption_l_per_100km"] = val
+                calendar_title = article.find('title', string='Calendar icon')
+                if calendar_title:
+                    # Navigate: title -> svg -> parent div -> p tag
+                    svg = calendar_title.find_parent('svg')
+                    if svg:
+                        parent_div = svg.find_parent('div')
+                        if parent_div:
+                            p_tag = parent_div.find('p')
+                            if p_tag:
+                                date_text = p_tag.text.strip()
+                                if 'Neues Fahrzeug' in date_text:
+                                    data["production_date"] = "Neues Fahrzeug"
+                                else:
+                                    date_match = re.search(r'(\d{1,2}\.\d{4})', date_text)
+                                    if date_match:
+                                        data["production_date"] = date_match.group(1)
 
                                 if idx < 3:
-                                    logging.info(f"   ✅ Article {idx+1}: Cons = {val}")
-                        except:
-                            pass
+                                    logging.info(f"   ✅ Article {idx+1}: Date = '{data['production_date']}'")
             except Exception as e:
                 if idx < 3:
-                    logging.debug(f"   ❌ Article {idx+1}: Cons not found - {e}")
+                    logging.warning(f"   ❌ Article {idx+1}: Date error - {e}")
+
+            # DOM NAVIGATION: Find Transmission icon
+            try:
+                trans_title = article.find('title', string='Transmission icon')
+                if trans_title:
+                    svg = trans_title.find_parent('svg')
+                    if svg:
+                        p_tag = svg.find_next_sibling('p')
+                        if p_tag:
+                            trans_text = p_tag.text.strip()
+                            data["transmission"] = normalize_transmission(trans_text)
+
+                            if idx < 3:
+                                logging.info(f"   ✅ Article {idx+1}: Trans = '{trans_text}'")
+            except Exception as e:
+                if idx < 3:
+                    logging.warning(f"   ❌ Article {idx+1}: Trans error - {e}")
+
+            # DOM NAVIGATION: Find Consumption icon
+            try:
+                cons_title = article.find('title', string='Consumption icon')
+                if cons_title:
+                    svg = cons_title.find_parent('svg')
+                    if svg:
+                        p_tag = svg.find_next_sibling('p')
+                        if p_tag:
+                            cons_text = p_tag.text.strip()
+
+                            if cons_text != '-':
+                                cons_match = re.search(r'([\d\.,]+)\s*l/100\s*km', cons_text)
+                                if cons_match:
+                                    num_str = cons_match.group(1).replace(',', '.')
+                                    try:
+                                        val = float(num_str)
+                                        if 1 <= val <= 50:
+                                            data["consumption_l_per_100km"] = val
+
+                                            if idx < 3:
+                                                logging.info(f"   ✅ Article {idx+1}: Cons = {val}")
+                                    except:
+                                        pass
+            except Exception as e:
+                if idx < 3:
+                    logging.warning(f"   ❌ Article {idx+1}: Cons error - {e}")
 
             results.append(data)
 
@@ -333,7 +347,7 @@ def run_scraper():
                 break
 
             time.sleep(3)
-            html_data = scrape_html_selenium_dom(driver)
+            html_data = scrape_html_dom_navigation(driver)
 
             merged = merge_data(json_data, html_data)
             all_data.extend(merged)

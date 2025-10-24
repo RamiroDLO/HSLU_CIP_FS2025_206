@@ -25,7 +25,7 @@ logging.basicConfig(
 
 #%% Cell 2
 # --- 1. CONFIGURATION & CONSTANTS ---
-TARGET_COUNT = 1
+TARGET_COUNT = 500
 OUTPUT_FILENAME = "autoscout_data_final.csv"
 START_URL = "https://www.autoscout24.ch/de/autos/alle-marken"
 
@@ -202,36 +202,6 @@ def scrape_page_2(driver) -> List[Dict]:
     logging.info(f"scrape_page_2: extracted {len(results)} DOM/icon entries from page.")
     return results
 
-#%% Cell 6
-def navigate_to_next_page(driver) -> bool:
-    """Navigates to the next page and waits for it to be ready."""
-    try:
-        next_selectors = ["[data-testid='pagination-next']", "[aria-label*='next']"]
-        next_button = None
-        for selector in next_selectors:
-            try:
-                next_button = driver.find_element(By.CSS_SELECTOR, selector)
-                if next_button.is_enabled():
-                    break
-            except NoSuchElementException:
-                continue
-
-        if next_button and next_button.is_enabled():
-            logging.info("   Next page button found. Clicking...")
-            driver.execute_script("arguments[0].click();", next_button)
-
-            logging.info("   Waiting for new page to become interactive...")
-            WebDriverWait(driver, 15).until(
-                lambda d: d.execute_script("return document.readyState") == "complete"
-            )
-            logging.info("   Next page is ready.")
-            return True
-        else:
-            logging.info("   No next page button found. Ending pagination.")
-            return False
-    except Exception as e:
-        logging.error(f"   An unexpected error occurred during pagination: {e}")
-        return False
 
 #%% Cell 7
 def save_to_csv(data: List[Dict], filename: str):
