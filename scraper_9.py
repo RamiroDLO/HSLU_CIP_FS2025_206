@@ -1,6 +1,7 @@
 """
 AutoScout24.ch Web Scraper - DOM Navigation Approach
 Uses BeautifulSoup to navigate HTML structure directly
+replace navigate_to_next_page with version from long_test, which works for more than 500 target_count
 """
 import time
 import json
@@ -254,28 +255,37 @@ def merge_data(json_data: List[Dict], html_data: List[Dict]) -> List[Dict]:
     return merged
 
 
+#%% Cell 6
 def navigate_to_next_page(driver) -> bool:
+    """Navigates to the next page and waits for it to be ready."""
     try:
-        wait = WebDriverWait(driver, 10)
-        next_button = wait.until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, "[data-testid='pagination-next']"))
-        )
+        next_selectors = ["[data-testid='pagination-next']", "[aria-label*='next']"]
+        next_button = None
+        for selector in next_selectors:
+            try:
+                next_button = driver.find_element(By.CSS_SELECTOR, selector)
+                if next_button.is_enabled():
+                    break
+            except NoSuchElementException:
+                continue
 
         if next_button and next_button.is_enabled():
-            driver.execute_script("arguments[0].scrollIntoView(true);", next_button)
-            time.sleep(0.5)
+            logging.info("   Next page button found. Clicking...")
             driver.execute_script("arguments[0].click();", next_button)
-            time.sleep(2)
 
+            logging.info("   Waiting for new page to become interactive...")
             WebDriverWait(driver, 15).until(
                 lambda d: d.execute_script("return document.readyState") == "complete"
             )
-            time.sleep(3)
-
+            logging.info("   Next page is ready.")
             return True
+        else:
+            logging.info("   No next page button found. Ending pagination.")
+            return False
+    except Exception as e:
+        logging.error(f"   An unexpected error occurred during pagination: {e}")
         return False
-    except:
-        return False
+
 
 
 def save_to_csv(data: List[Dict], filename: str):
