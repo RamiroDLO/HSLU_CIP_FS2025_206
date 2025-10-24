@@ -17,8 +17,8 @@ SPOT = {
     "Lithium_Spot": "LIT",   # Global X Lithium & Battery Tech ETF (proxy for lithium prices)
     "Aluminium_Spot": "ALI=F",
     "Steel_Spot": "HRC=F",   # U.S. Midwest HRC (CRU) Index futures (continuous)
-    "Nickel_Spot": "^SPGSIK", # S&P GSCI Nickel Index (proxy)
-    "Cobalt_Spot": "NICMF",  # Nickel Industries Limited (produces nickel & cobalt; proxy)
+    "Nickel_Spot": "NIC.AX", # S&P GSCI Nickel Index (proxy)
+    "Cobalt_Spot": "603799.SS",  # Zhejiang Huayou Cobalt (mining, refining,  manufacturing, and recycling cobalt and other materials; proxy)
 }
 
 def gen_contracts(root: str, exch: str, contracts_list: List[Tuple[int, int]]) -> List[str]:
