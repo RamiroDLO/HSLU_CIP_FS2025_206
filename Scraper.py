@@ -1,6 +1,7 @@
 """
 AutoScout24.ch Web Scraper - Structure-Aware Extraction
 Uses SVG icon titles + sibling <p> tags with fallback to regex
+MODIFIED: Scrapes only 4 listings per page then moves to next page
 """
 import time
 import json
@@ -17,7 +18,8 @@ from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from bs4 import BeautifulSoup
 
 # Configuration
-TARGET_COUNT = 100  # Scrape ~5 pages (20 listings per page)
+TARGET_COUNT = 2000  # Total listings to scrape
+LISTINGS_PER_PAGE = 4  # ← NEW: Only scrape 4 listings per page
 OUTPUT_FILENAME = "autoscout_data_complete.csv"
 START_URL = "https://www.autoscout24.ch/de/autos/alle-marken"
 
@@ -126,7 +128,8 @@ def scrape_json_data(driver) -> List[Dict]:
 
         car_list = structured_data.get('mainEntity', {}).get('offers', {}).get('itemListElement', [])
 
-        for item in car_list:
+        # ← MODIFIED: Only take first 4 listings
+        for item in car_list[:LISTINGS_PER_PAGE]:
             try:
                 offers = item.get('offers', {})
                 item_offered = offers.get('itemOffered', {})
@@ -148,7 +151,7 @@ def scrape_json_data(driver) -> List[Dict]:
             except Exception as e:
                 logging.warning(f"   Could not parse JSON item: {e}")
 
-        logging.info(f"   ✅ Extracted {len(listings_data)} from JSON-LD")
+        logging.info(f"   ✅ Extracted {len(listings_data)} from JSON-LD (limited to {LISTINGS_PER_PAGE})")
     except Exception as e:
         logging.error(f"   ❌ JSON extraction error: {e}")
 
@@ -160,6 +163,7 @@ def scrape_html_hybrid_approach(driver) -> List[Dict]:
     Hybrid extraction: Structure-aware with regex fallback
     Primary: Use SVG icon + sibling <p> tag
     Fallback: Regex on article text
+    MODIFIED: Only scrape first 4 listings
     """
     results = []
 
@@ -183,7 +187,10 @@ def scrape_html_hybrid_approach(driver) -> List[Dict]:
             logging.info("   Method 2 failed, using all articles...")
             articles = soup.find_all('article')
 
-        logging.info(f"   Found {len(articles)} car articles (ads filtered out)")
+        # ← MODIFIED: Only process first 4 articles
+        articles = articles[:LISTINGS_PER_PAGE]
+
+        logging.info(f"   Found {len(articles)} car articles (limited to {LISTINGS_PER_PAGE} per page)")
 
         if not articles:
             return []
@@ -219,167 +226,64 @@ def scrape_html_hybrid_approach(driver) -> List[Dict]:
 
         for idx, article in enumerate(articles):
             data = {
-                "listing_url": "N/A",
-                "production_date": "N/A",
-                "consumption_l_per_100km": "N/A",
-                "transmission": "N/A"
+                'production_date': 'N/A',
+                'consumption_l_per_100km': 'N/A',
+                'transmission': 'N/A',
+                'listing_url': 'N/A'
             }
 
-            # Extract URL (keep existing logic)
             try:
-                link = article.find('a', href=re.compile(r'/de/d/'))
-                if link and link.get('href'):
-                    href = link['href']
-                    if not href.startswith('http'):
-                        href = "https://www.autoscout24.ch" + href
-                    data["listing_url"] = href.split("?")[0]
-            except:
-                pass
+                # Get listing URL
+                link_tag = article.find('a', href=True)
+                if link_tag:
+                    full_url = link_tag['href']
+                    if full_url.startswith('http'):
+                        data['listing_url'] = full_url.split("?")[0]
+                    elif full_url.startswith('/'):
+                        data['listing_url'] = f"https://www.autoscout24.ch{full_url.split('?')[0]}"
 
-            # Get all text for fallback
-            article_text = article.get_text(separator=' ', strip=True)
+                # Extract with structure-aware method
+                production_date = extract_value_by_icon(article, "Calendar icon")
+                if production_date:
+                    data['production_date'] = production_date
 
-            # Try to find the specs grid specifically (css-81gdcv or css-70qvj9 containers)
-            specs_container = article.find('div', class_=lambda x: x and 'css-81gdcv' in x)
+                consumption = extract_value_by_icon(article, "Fuel icon")
+                if consumption:
+                    data['consumption_l_per_100km'] = consumption
 
-            if specs_container:
-                # Count how many spec rows this article has
-                spec_rows = specs_container.find_all('div', class_=lambda x: x and 'css-70qvj9' in x)
-                if idx < 5:
-                    logging.info(f"   🎯 Article {idx+1}: Found specs container with {len(spec_rows)} rows")
-            else:
-                if idx < 5:
-                    logging.warning(f"   ⚠️  Article {idx+1}: NO specs container found!")
-                    # Check if this article has ANY icons at all
-                    all_icons = article.find_all('title')
-                    if all_icons:
-                        logging.info(f"   🔍 Article {idx+1} has {len(all_icons)} icons but no specs grid")
+                transmission = extract_value_by_icon(article, "Transmission icon")
+                if transmission:
+                    data['transmission'] = normalize_transmission(transmission)
 
-            # For debugging: log URL for articles that will fail
-            if idx < 10:
-                logging.info(f"   🔗 Article {idx+1} URL: {data['listing_url']}")
+                # FALLBACK: Regex extraction if structure-aware failed
+                article_text = article.get_text(separator=' ', strip=True)
 
-            # ========== PRODUCTION DATE ==========
-            try:
-                # Method 1: Structure-aware extraction
-                date_value = extract_value_by_icon(article, 'Calendar icon')
+                # Fallback: Production Date (e.g., "10/2023", "2023")
+                if data['production_date'] == 'N/A':
+                    date_match = re.search(r'\b(\d{1,2}/\d{4}|\d{4})\b', article_text)
+                    if date_match:
+                        data['production_date'] = date_match.group(1)
 
-                if date_value:
-                    if 'Neues Fahrzeug' in date_value or 'neues Fahrzeug' in date_value:
-                        data["production_date"] = "Neues Fahrzeug"
-                    else:
-                        # Extract MM.YYYY from the value
-                        date_match = re.search(r'\b(0?[1-9]|1[0-2])\.(\d{4})\b', date_value)
-                        if date_match:
-                            month = date_match.group(1).zfill(2)
-                            year = date_match.group(2)
-                            if 1950 <= int(year) <= 2026:
-                                data["production_date"] = f"{month}.{year}"
-                else:
-                    if idx < 5:
-                        logging.warning(f"   ⚠️  Article {idx+1}: Calendar icon not found or no value")
+                # Fallback: Consumption (e.g., "5.2 l/100 km")
+                if data['consumption_l_per_100km'] == 'N/A':
+                    cons_match = re.search(r'(\d+\.\d+)\s*l/100\s*km', article_text)
+                    if cons_match:
+                        data['consumption_l_per_100km'] = cons_match.group(1)
 
-                # Method 2: Regex fallback on full text
-                if data["production_date"] == "N/A":
-                    if 'Neues Fahrzeug' in article_text or 'neues Fahrzeug' in article_text:
-                        data["production_date"] = "Neues Fahrzeug"
-                        if idx < 5:
-                            logging.info(f"   ✅ Article {idx+1}: Date = 'Neues Fahrzeug' (fallback)")
-                    else:
-                        date_match = re.search(r'\b(0?[1-9]|1[0-2])\.(\d{4})\b', article_text)
-                        if date_match:
-                            month = date_match.group(1).zfill(2)
-                            year = date_match.group(2)
-                            if 1950 <= int(year) <= 2026:
-                                data["production_date"] = f"{month}.{year}"
-                                if idx < 5:
-                                    logging.info(f"   ✅ Article {idx+1}: Date = '{data['production_date']}' (fallback)")
-
-                if data["production_date"] != "N/A" and idx < 5:
-                    logging.info(f"   ✅ Article {idx+1}: Date = '{data['production_date']}'")
-                elif idx < 5:
-                    logging.warning(f"   ❌ Article {idx+1}: Date = N/A (not found)")
-            except Exception as e:
-                if idx < 5:
-                    logging.warning(f"   ❌ Article {idx+1}: Date error - {e}")
-
-            # ========== TRANSMISSION ==========
-            try:
-                # Method 1: Structure-aware extraction
-                trans_value = extract_value_by_icon(article, 'Transmission icon')
-
-                if trans_value:
-                    data["transmission"] = normalize_transmission(trans_value)
-                else:
-                    if idx < 5:
-                        logging.warning(f"   ⚠️  Article {idx+1}: Transmission icon not found or no value")
-
-                # Method 2: Regex fallback
-                if data["transmission"] == "N/A":
-                    for trans_type in TRANSMISSION_PATTERNS:
-                        if re.search(r'\b' + re.escape(trans_type) + r'\b', article_text, re.IGNORECASE):
-                            data["transmission"] = normalize_transmission(trans_type)
-                            if idx < 5:
-                                logging.info(f"   ✅ Article {idx+1}: Trans = '{data['transmission']}' (fallback)")
+                # Fallback: Transmission
+                if data['transmission'] == 'N/A':
+                    for pattern in TRANSMISSION_PATTERNS:
+                        if pattern in article_text:
+                            data['transmission'] = normalize_transmission(pattern)
                             break
 
-                if data["transmission"] != "N/A" and idx < 5:
-                    logging.info(f"   ✅ Article {idx+1}: Trans = '{data['transmission']}'")
-                elif idx < 10:
-                    # Log missing transmission with URL for first 10 articles
-                    logging.warning(f"   ❌ Article {idx+1}: Trans = N/A | URL: {data['listing_url']}")
+                results.append(data)
+
             except Exception as e:
-                if idx < 5:
-                    logging.warning(f"   ❌ Article {idx+1}: Trans error - {e}")
+                logging.warning(f"   Error parsing article {idx + 1}: {e}")
+                results.append(data)
 
-            # ========== CONSUMPTION ==========
-            try:
-                # Method 1: Structure-aware extraction
-                cons_value = extract_value_by_icon(article, 'Consumption icon')
-
-                if cons_value:
-                    if idx < 5:
-                        logging.info(f"   🔍 Article {idx+1}: Cons raw value = '{cons_value}'")
-                    # Parse consumption value
-                    cons_match = re.search(r'(\d+[,.]?\d*)\s*l\s*/?\s*100\s*km', cons_value, re.IGNORECASE)
-                    if cons_match:
-                        num_str = cons_match.group(1).replace(',', '.')
-                        try:
-                            val = float(num_str)
-                            if 1 <= val <= 50:
-                                data["consumption_l_per_100km"] = val
-                        except ValueError:
-                            pass
-                    elif cons_value in ['-', '—', '–']:
-                        if idx < 5:
-                            logging.info(f"   ℹ️  Article {idx+1}: Cons = N/A (dash found, no data available)")
-                else:
-                    if idx < 5:
-                        logging.warning(f"   ⚠️  Article {idx+1}: Consumption icon not found")
-
-                # Method 2: Regex fallback on full text
-                if data["consumption_l_per_100km"] == "N/A":
-                    cons_match = re.search(r'(\d+[,.]?\d*)\s*l\s*/?\s*100\s*km', article_text, re.IGNORECASE)
-                    if cons_match:
-                        num_str = cons_match.group(1).replace(',', '.')
-                        try:
-                            val = float(num_str)
-                            if 1 <= val <= 50:
-                                data["consumption_l_per_100km"] = val
-                                if idx < 5:
-                                    logging.info(f"   ✅ Article {idx+1}: Cons = {val} l/100km (fallback)")
-                        except ValueError:
-                            pass
-
-                if data["consumption_l_per_100km"] != "N/A" and idx < 5:
-                    logging.info(f"   ✅ Article {idx+1}: Cons = {data['consumption_l_per_100km']} l/100km")
-            except Exception as e:
-                if idx < 5:
-                    logging.warning(f"   ❌ Article {idx+1}: Cons error - {e}")
-
-            results.append(data)
-
-        # Stats
+        # Log extraction statistics
         stats = {
             'date': sum(1 for r in results if r["production_date"] != "N/A"),
             'trans': sum(1 for r in results if r["transmission"] != "N/A"),
@@ -528,6 +432,7 @@ def run_scraper():
 
     try:
         logging.info("=== STARTING SCRAPER ===")
+        logging.info(f"📋 Configuration: {LISTINGS_PER_PAGE} listings per page, Target: {TARGET_COUNT} total")
 
         options = uc.ChromeOptions()
         options.add_argument("--no-sandbox")
