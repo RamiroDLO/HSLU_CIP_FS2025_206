@@ -5,6 +5,7 @@ Extracts brand and top-level model from detailed car names
 import csv
 import re
 import sys
+from pathlib import Path
 
 
 def extract_brand_and_model(car_model: str) -> tuple:
@@ -104,18 +105,21 @@ def extract_brand_and_model(car_model: str) -> tuple:
     return (brand, "N/A")
 
 
-def clean_csv_file(input_filename: str, output_filename: str = None):
+def clean_csv_file(input_filename, output_filename=None):
     """
     Read CSV, extract brand and model, and save cleaned version
     """
+    input_path = Path(input_filename)
     if output_filename is None:
-        output_filename = input_filename.replace('.csv', '_cleaned.csv')
+        output_filename = input_path.with_name(f"cleaned_{input_path.name}")
+    else:
+        output_filename = Path(output_filename)
 
     try:
-        print(f"📖 Reading {input_filename}...")
+        print(f"📖 Reading {input_path}...")
 
         # Read the CSV
-        with open(input_filename, 'r', encoding='utf-8') as f:
+        with open(input_path, 'r', encoding='utf-8') as f:
             reader = csv.DictReader(f)
             rows = list(reader)
 
@@ -169,20 +173,24 @@ def clean_csv_file(input_filename: str, output_filename: str = None):
             print(f"   {brand}: {count}")
 
     except FileNotFoundError:
-        print(f"❌ Error: File '{input_filename}' not found")
+        print(f"❌ Error: File '{input_path}' not found")
     except Exception as e:
         print(f"❌ Error: {e}")
 
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python clean_csv.py <input_file.csv> [output_file.csv]")
-        print("\nExample:")
-        print("  python clean_csv.py autoscout_data_complete.csv")
-        print("  python clean_csv.py autoscout_data_complete.csv cleaned_data.csv")
-        sys.exit(1)
+        script_dir = Path(__file__).resolve().parent
+        default_input = script_dir / "autoscout_data_complete.csv"
+        default_output = script_dir / "cleaned_autoscout_data_complete.csv"
 
-    input_file = sys.argv[1]
-    output_file = sys.argv[2] if len(sys.argv) > 2 else None
+        print("ℹ️  No input provided. Using defaults:")
+        print(f"   Input:  {default_input}")
+        print(f"   Output: {default_output}")
 
-    clean_csv_file(input_file, output_file)
+        clean_csv_file(default_input, default_output)
+    else:
+        input_file = sys.argv[1]
+        output_file = sys.argv[2] if len(sys.argv) > 2 else None
+
+        clean_csv_file(input_file, output_file)
