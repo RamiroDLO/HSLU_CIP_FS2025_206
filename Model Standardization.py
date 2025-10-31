@@ -22,6 +22,7 @@ model_replacements = {
     'Smart #5 100kWh': '#5',
     'Smart #1 66': '#1',
     'TESLA Model Y': 'Model Y',
+    'TESLA TESLA Model 3 Performance, 513 PS' : 'Model 3',
     'TESLA Signature Sport': 'Rodster',
     'TESLA Model S': 'Model S',
     'Toyota C-HR': 'C-HR',
