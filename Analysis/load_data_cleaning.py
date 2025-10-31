@@ -131,6 +131,23 @@ print(f"   Rounded commodity values to 2 decimals.")
 print("\n Datasets are ready as 'autoscout_df' and 'yahoo_spot_df'.")
 
 
+# %% save_cleaned_data
+print("\n💾 Saving cleaned datasets...")
+
+output_dir = PROJECT_ROOT / "Analysis" / "cleaned_data"
+output_dir.mkdir(parents=True, exist_ok=True)
+
+autoscout_clean_path = output_dir / "autoscout_cleaned.csv"
+yahoo_clean_path = output_dir / "yahoo_spot_cleaned.csv"
+
+autoscout_df.to_csv(autoscout_clean_path, index=False, sep=";")
+yahoo_spot_df.to_csv(yahoo_clean_path, index=False, sep=",")
+
+print(f"   ✓ AutoScout: {autoscout_clean_path.relative_to(PROJECT_ROOT)}")
+print(f"   ✓ Yahoo Spot: {yahoo_clean_path.relative_to(PROJECT_ROOT)}")
+print(f"   Ready for analysis scripts.")
+
+
 # %% dtale_views
 print("\n Launching D-Tale dataframe views (ensure 'dtale' is installed)...")
 # Clear any cached D-Tale instances to avoid stale configuration
