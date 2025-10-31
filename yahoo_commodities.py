@@ -15,25 +15,6 @@ SPOT = {
     "Cobalt_Spot": "603799.SS"
 }
 
-def fill_with_rolling_mean(df, window=7):
-    """Fill NaN values with mean of previous 'window' non-empty values."""
-    df_filled = df.copy()
-    
-    for col in df_filled.columns:
-        # Create rolling mean of last 7 non-NaN values
-        filled_series = df_filled[col].copy()
-        
-        for idx in df_filled[df_filled[col].isna()].index:
-            # Get previous non-NaN values
-            prev_values = df_filled.loc[:idx, col].dropna().tail(window)
-            
-            if len(prev_values) > 0:
-                filled_series.loc[idx] = prev_values.mean()
-        
-        df_filled[col] = filled_series
-    
-    return df_filled
-
 def main():
     # Download data
     tickers = list(SPOT.values())
@@ -46,12 +27,17 @@ def main():
     # Rename columns
     df.columns = [k for k, v in SPOT.items() if v in df.columns]
     
-    # Fill missing values with 7-day rolling mean
-    print(f"Missing values before filling: {df.isna().sum().sum()}")
-    df = fill_with_rolling_mean(df, window=7)
-    print(f"Missing values after filling: {df.isna().sum().sum()}")
-    df = df.round(2)
+      # Add Month column in MM.YYYY format
+    df.insert(0, 'Month', df.index.strftime('%m-%Y'))
+    
+    # Calculate monthly averages for each commodity and add as new columns
+    df_monthly_avg = df.groupby('Month')[list(SPOT.keys())].transform('mean').round(2)
+    
+    # Rename monthly average columns
+    for col in SPOT.keys():
+        df[f'{col}_Monthly_Avg'] = df_monthly_avg[col]
 
+    df = df.round(2)
 
     # Save as plain CSV (standard format)
     df.to_csv("API_data_pull/yahoo_spot.csv")
