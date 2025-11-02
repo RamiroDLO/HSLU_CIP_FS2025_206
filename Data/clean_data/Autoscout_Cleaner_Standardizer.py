@@ -1,26 +1,13 @@
-<<<<<<<< HEAD:Data/clean_data/Autoscout_Cleaner_Standardizer.py
 """
 Combined CSV Cleaner and Model Standardizer for AutoScout24 Data
 1. Extracts brand and top-level model from detailed car names
 2. Standardizes model names using replacement dictionary
-========
-""" 
-Combined AutoScout24 cleaner:
-1. Extracts brand/model fields (original Clean_csv structure)
-2. Standardizes model names (Model Standardization mapping)
->>>>>>>> origin/main:Data/clean_data/extract_models_then_standardize.py
 """
 import csv
 import re
 import sys
 from pathlib import Path
 import pandas as pd
-
-
-# Configuration: Define input/output paths here
-SCRIPT_DIR = Path(__file__).resolve().parent
-INPUT_FILE = SCRIPT_DIR.parent / "Scraping" / "autoscout_data_complete.csv"
-OUTPUT_FILE = SCRIPT_DIR / "cleaned_autoscout_data_complete.csv"
 
 
 def extract_brand_and_model(car_model: str) -> tuple:
@@ -120,7 +107,6 @@ def extract_brand_and_model(car_model: str) -> tuple:
     return (brand, "N/A")
 
 
-<<<<<<<< HEAD:Data/clean_data/Autoscout_Cleaner_Standardizer.py
 def standardize_models(df):
     """
     Standardize model names using replacement dictionary
@@ -168,51 +154,6 @@ def standardize_models(df):
 
 def clean_and_standardize_csv(input_filename, output_filename=None):
     """
-========
-# Dictionary mapping search terms to correct model names (from Model Standardization script)
-model_replacements = {
-    'AUDI e-tron': 'e-tron',
-    'AUDI 2.0 TDI': ' 2.0 TDI',
-    '6.0 Double Six': '6.0',
-    '4x4 Country Club': '4x4 Country Club',
-    'FORD S-Max': 'S-Max',
-    'FORD C-Max': 'C-Max',
-    'JAGUAR I-Pace': 'I-Pace',
-    'Grand Cherokee': 'Grand Cherokee',
-    'Range Rover Evoque 2.0': 'Range Rover Evoque 2.0',
-    'MERCEDES-BENZ A AMG 45 S 4Matic+ 8G-DCT': 'A AMG',
-    'i MiEV': 'i MiEV',
-    '9-3 2.0i': '9-3 2.0i',
-    'Smart #5 100kWh': '#5',
-    'Smart #1 66': '#1',
-    'TESLA Model Y': 'Model Y',
-    'TESLA TESLA Model 3 Performance, 513 PS': 'Model 3',
-    'TESLA Signature Sport': 'Rodster',
-    'TESLA Model S': 'Model S',
-    'Toyota C-HR': 'C-HR',
-    'T-Cross': 'T-Cross',
-    'VW R-Line 3.0': 'R-Line 3.0',
-    'T-Roc': 'T-Roc',
-    'New Beetle Cabrio': 'Beetle Cabrio',
-    'Käfer Cabriolet': 'Beetle Cabrio',
-    'e-Golf': 'e-Golf'
-}
-
-
-def standardize_model(row: dict) -> str:
-    """
-    Apply model name standardization based on car_model string matching
-    """
-    car_model_str = str(row.get('car_model', ''))
-    for search_term, correct_model in model_replacements.items():
-        if search_term in car_model_str:
-            return correct_model
-    return row.get('model', 'N/A')
-
-
-def clean_csv_file(input_filename, output_filename=None):
-    """
->>>>>>>> origin/main:Data/clean_data/extract_models_then_standardize.py
     Read CSV, extract brand and model, standardize models, and save cleaned version
     """
     input_path = Path(input_filename)
@@ -236,36 +177,19 @@ def clean_csv_file(input_filename, output_filename=None):
         print(f"✅ Found {len(rows)} rows")
         print("🔧 Step 1: Extracting brands and models...")
 
-<<<<<<<< HEAD:Data/clean_data/Autoscout_Cleaner_Standardizer.py
         # Process each row to extract brand and model
-========
-        standardized_count = 0
-
-        # Process each row
->>>>>>>> origin/main:Data/clean_data/extract_models_then_standardize.py
         for row in rows:
             car_model = row.get('car_model', 'N/A')
             brand, model = extract_brand_and_model(car_model)
             row['brand'] = brand
             row['model'] = model
 
-<<<<<<<< HEAD:Data/clean_data/Autoscout_Cleaner_Standardizer.py
         # Convert to DataFrame for standardization
-========
-            # Apply model standardization
-            standardized_model = standardize_model(row)
-            if standardized_model != row['model']:
-                standardized_count += 1
-                row['model'] = standardized_model
-
-        # Write cleaned data
->>>>>>>> origin/main:Data/clean_data/extract_models_then_standardize.py
         fieldnames = ['brand', 'model', 'car_model', 'price_chf', 'mileage', 'engine_power_hp',
                       'power_mode', 'production_date', 'consumption_l_per_100km', 'transmission', 'listing_url']
 
         df = pd.DataFrame(rows)
 
-<<<<<<<< HEAD:Data/clean_data/Autoscout_Cleaner_Standardizer.py
         print("🔧 Step 2: Standardizing model names...")
 
         # Apply model standardization
@@ -275,11 +199,6 @@ def clean_csv_file(input_filename, output_filename=None):
         df[fieldnames].to_csv(output_filename, index=False)
 
         print(f"✅ Cleaned and standardized data saved to {output_filename}")
-========
-        print(f"✅ Cleaned data saved to {output_filename}")
-        if standardized_count:
-            print(f"   ↪︎ Standardized model names on {standardized_count} rows")
->>>>>>>> origin/main:Data/clean_data/extract_models_then_standardize.py
 
         # Show some examples
         print("\n📊 Examples of brand/model extraction and standardization:")
@@ -310,12 +229,11 @@ def clean_csv_file(input_filename, output_filename=None):
 
 
 if __name__ == "__main__":
-<<<<<<<< HEAD:Data/clean_data/Autoscout_Cleaner_Standardizer.py
     if len(sys.argv) < 2:
         # Hardcoded paths - update these to match your project structure
         script_dir = Path(__file__).resolve().parent
         default_input = script_dir.parent / "Scraping" / "autoscout_data_complete.csv"
-        default_output = script_dir.parent / "Final Data" / "Autoscout_Cleaned_Standardized.csv"
+        default_output = script_dir / "Autoscout_Cleaned_Standardized.csv"
 
         # Check if file exists
         if not default_input.exists():
@@ -336,11 +254,3 @@ if __name__ == "__main__":
         output_file = sys.argv[2] if len(sys.argv) > 2 else None
 
         clean_and_standardize_csv(input_file, output_file)
-========
-    print("ℹ️  Using configured paths:")
-    print(f"   Input:  {INPUT_FILE}")
-    print(f"   Output: {OUTPUT_FILE}")
-    print()
-    
-    clean_csv_file(INPUT_FILE, OUTPUT_FILE)
->>>>>>>> origin/main:Data/clean_data/extract_models_then_standardize.py
