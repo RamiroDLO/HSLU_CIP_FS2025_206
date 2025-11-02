@@ -134,7 +134,7 @@ print("\n Datasets are ready as 'autoscout_df' and 'yahoo_spot_df'.")
 # %% save_cleaned_data
 print("\n💾 Saving cleaned datasets...")
 
-output_dir = PROJECT_ROOT / "Analysis" / "cleaned_data"
+output_dir = PROJECT_ROOT / "Analysis" / "Final Data"
 output_dir.mkdir(parents=True, exist_ok=True)
 
 autoscout_clean_path = output_dir / "autoscout_cleaned.csv"
