@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy import stats
 
-df = pd.read_csv('../../API_data_pull/yahoo_spot.csv', sep=';', index_col=0, decimal=',', parse_dates=True)
+df = pd.read_csv('../../Data/API_data_pull/yahoo_spot.csv', sep=';', index_col=0, decimal=',', parse_dates=True)
 
 print(df.dtypes)
 df.head()
