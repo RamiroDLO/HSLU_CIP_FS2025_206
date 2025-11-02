@@ -14,58 +14,7 @@ from sklearn.impute import IterativeImputer
 
 # %% paths
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-
-AUTOSCOUT_DATA_PATH = PROJECT_ROOT / "cleaned_autoscout_data_complete.csv"
 YAHOO_SPOT_DATA_PATH = PROJECT_ROOT / "API_data_pull" / "yahoo_spot.csv"
-
-
-# %% load_autoscout
-print("🔍 Locating cleaned AutoScout dataset...")
-autoscout_path = AUTOSCOUT_DATA_PATH
-if not autoscout_path.exists():
-    raise FileNotFoundError(f"AutoScout data not found at {autoscout_path}")
-
-print(f" Reading {autoscout_path}...")
-autoscout_df = pd.read_csv(autoscout_path, sep=";")
-
-new_vehicle_mask = autoscout_df["production_date"] == "Neues Fahrzeug"
-new_vehicle_count = int(new_vehicle_mask.sum())
-if new_vehicle_count:
-    autoscout_df.loc[new_vehicle_mask, "production_date"] = "102.025"
-
-print(
-    " AutoScout dataset loaded:",
-    f"   Rows: {autoscout_df.shape[0]}",
-    f"   Columns: {autoscout_df.shape[1]}",
-    sep="\n",
-)
-if new_vehicle_count:
-    print(f"    Replaced 'Neues Fahrzeug' in production_date for {new_vehicle_count} rows (set to 102.025).")
-
-
-# %% impute_consumption
-print("\n🛠️ Imputing missing consumption_l_per_100km values...")
-
-autoscout_df["consumption_l_per_100km"] = pd.to_numeric(
-    autoscout_df["consumption_l_per_100km"], errors="coerce"
-)
-
-consumption_missing_before = autoscout_df["consumption_l_per_100km"].isna().sum()
-
-if consumption_missing_before:
-    imputer = IterativeImputer(random_state=42, max_iter=10, sample_posterior=False)
-    autoscout_df[["consumption_l_per_100km"]] = imputer.fit_transform(
-        autoscout_df[["consumption_l_per_100km"]]
-    )
-    consumption_missing_after = autoscout_df["consumption_l_per_100km"].isna().sum()
-    consumption_mean = autoscout_df["consumption_l_per_100km"].mean()
-    print(
-        "   Filled missing consumption values:",
-        f"{consumption_missing_before - consumption_missing_after} rows",
-        f"(mean now {consumption_mean:.2f} L/100km)",
-    )
-else:
-    print("   No missing consumption values detected.")
 
 
 # %% load_yahoo
@@ -137,53 +86,10 @@ print("\n💾 Saving cleaned datasets...")
 output_dir = PROJECT_ROOT / "Analysis" / "Final Data"
 output_dir.mkdir(parents=True, exist_ok=True)
 
-autoscout_clean_path = output_dir / "autoscout_cleaned.csv"
 yahoo_clean_path = output_dir / "yahoo_spot_cleaned.csv"
 
-autoscout_df.to_csv(autoscout_clean_path, index=False, sep=";")
 yahoo_spot_df.to_csv(yahoo_clean_path, index=False, sep=",")
 
-print(f"   ✓ AutoScout: {autoscout_clean_path.relative_to(PROJECT_ROOT)}")
+
 print(f"   ✓ Yahoo Spot: {yahoo_clean_path.relative_to(PROJECT_ROOT)}")
 print(f"   Ready for analysis scripts.")
-
-
-# %% dtale_views
-print("\n Launching D-Tale dataframe views (ensure 'dtale' is installed)...")
-# Clear any cached D-Tale instances to avoid stale configuration
-dtale.global_state.cleanup()
-
-dtale_app.ACTIVE_HOST = "localhost"
-autoscout_view = dtale.show(
-    autoscout_df,
-    name="autoscout data",
-    locked=[],
-    open_browser=True,
-    port=4000,
-    host="localhost"
-)
-if autoscout_view:
-    print(f"   AutoScout D-Tale: {autoscout_view.main_url()}")
-
-time.sleep(1)
-
-yahoo_spot_view = dtale.show(
-    yahoo_spot_df,
-    name="yahoo spot cleaned",
-    locked=[],
-    open_browser=True,
-    port=4001,
-    host="localhost"
-)
-if yahoo_spot_view:
-    print(f"   Yahoo Spot (Cleaned) D-Tale: {yahoo_spot_view.main_url()}")
-
-print("\n   D-Tale servers running on localhost:4000 and localhost:4001")
-print("   Press Ctrl+C to stop.")
-try:
-    input()
-except KeyboardInterrupt:
-    print("\n   Shutting down D-Tale servers...")
-finally:
-    dtale.global_state.cleanup()
-
