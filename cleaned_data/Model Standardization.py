@@ -3,7 +3,7 @@ import csv
 import sys
 import pandas as pd
 
-df = pd.read_csv("./cleaned_autoscout_data_complete.csv")
+df = pd.read_csv("cleaned_autoscout_data_complete.csv")
 
 # Dictionary mapping search terms to correct model names
 model_replacements = {
