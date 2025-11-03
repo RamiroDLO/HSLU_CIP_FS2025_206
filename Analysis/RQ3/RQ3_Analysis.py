@@ -9,18 +9,10 @@ from pathlib import Path
 # Get script location
 script_dir = Path(__file__).parent
 
-# Define relative paths from the script's location
+# Relative paths from the script location
 data_dir = script_dir.parent.parent / "Data" / "Final Data"
 path_autoscout = data_dir / "Autoscout_Cleaned_Standardized.csv"
 path_yahoo = data_dir / "yahoo_spot_cleaned.csv"
-
-# Print debug info
-print("Script directory:", script_dir.absolute())
-print("Data directory:", data_dir.absolute())
-print("Looking for files:")
-print(f"- {path_autoscout.absolute()}")
-print(f"- {path_yahoo.absolute()}")
-print("\nIf files are not found, please check the paths above and ensure the files exist.")
 
 try:
     # Load the data
