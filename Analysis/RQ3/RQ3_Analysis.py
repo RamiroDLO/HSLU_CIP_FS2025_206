@@ -345,12 +345,16 @@ if 'analysis_window' in locals() and not analysis_window.empty:
 
         avg_price = selected_df.groupby('brand')['price_chf_mean'].mean().sort_values(ascending=False)
 
-        plt.figure(figsize=(10, 5))
+        fig1 = plt.figure(figsize=(10, 5))
         plt.bar(avg_price.index, avg_price.values, color='steelblue')
         plt.title('Average Monthly Car Price (Post-2020)')
         plt.ylabel('Average price (CHF)')
         plt.xticks(rotation=45, ha='right')
         plt.tight_layout()
+        output_dir = script_dir / "outputs"
+        output_dir.mkdir(exist_ok=True)
+        fig1.savefig(output_dir / "avg_price_by_brand.png", dpi=300, bbox_inches='tight')
+        print(f"Saved: {output_dir / 'avg_price_by_brand.png'}")
         plt.show()
 
         if commodity_cols:
@@ -365,13 +369,16 @@ if 'analysis_window' in locals() and not analysis_window.empty:
                 corr_values = [(b, c) for b, c in corr_values if pd.notna(c)]
                 if corr_values:
                     brands_corr, values_corr = zip(*corr_values)
-                    plt.figure(figsize=(10, 5))
+                    fig = plt.figure(figsize=(10, 5))
                     plt.bar(brands_corr, values_corr, color='darkorange')
                     plt.axhline(0, color='black', linewidth=0.8)
                     plt.title(f'Price vs {commodity} correlation')
                     plt.ylabel('Pearson correlation')
                     plt.xticks(rotation=45, ha='right')
                     plt.tight_layout()
+                    commodity_clean = commodity.replace('_Monthly_Avg', '').replace('_Spot', '')
+                    fig.savefig(output_dir / f"correlation_{commodity_clean}.png", dpi=300, bbox_inches='tight')
+                    print(f"Saved: {output_dir / f'correlation_{commodity_clean}.png'}")
                     plt.show()
                 else:
                     print(f"Correlation could not be computed for {commodity} (insufficient variation).")
@@ -390,13 +397,15 @@ if 'analysis_window' in locals() and not analysis_window.empty:
             print(corr_matrix)
 
             if not corr_matrix.empty:
-                plt.figure(figsize=(1 + 0.6 * len(corr_matrix.columns), 0.6 * len(corr_matrix.index) + 2))
+                fig_heatmap = plt.figure(figsize=(1 + 0.6 * len(corr_matrix.columns), 0.6 * len(corr_matrix.index) + 2))
                 plt.imshow(corr_matrix.values, cmap='coolwarm', aspect='auto', vmin=-1, vmax=1)
                 plt.colorbar(label='Correlation')
                 plt.xticks(range(len(corr_matrix.columns)), corr_matrix.columns, rotation=45, ha='right')
                 plt.yticks(range(len(corr_matrix.index)), corr_matrix.index)
                 plt.title('Price vs Commodity Correlation Matrix')
                 plt.tight_layout()
+                fig_heatmap.savefig(output_dir / "correlation_matrix_heatmap.png", dpi=300, bbox_inches='tight')
+                print(f"Saved: {output_dir / 'correlation_matrix_heatmap.png'}")
                 plt.show()
         else:
             print("No commodity columns found for plotting.")
