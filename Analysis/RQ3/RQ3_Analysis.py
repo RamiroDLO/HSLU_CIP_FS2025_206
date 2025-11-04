@@ -5,6 +5,7 @@ to raw material cost pressures."""
 import pandas as pd
 import os
 from pathlib import Path
+import matplotlib.pyplot as plt
 import dtale
 #%% Cell 1 Load Data
 # Get script location
@@ -238,4 +239,203 @@ else:
 # to be done, didnt work with dtale this time, unstable local host browser connection
 
 #%% Cell 4 relationship between commodity prices and used car values across brands
-# Aggregate car prices (mean/median) by brand and Month, then visualise trends alongside commodity curves to spot brand-specific sensitivities.
+
+# step1: aggregate average price by brands & months, then merge with commodity avg monthly prices columns
+if 'merged_df' in locals(): # make sure that the merged_df is loaded
+    commodity_cols = [col for col in merged_df.columns if col.endswith('_Monthly_Avg')]
+
+    brand_month_summary = (
+        merged_df.groupby(['brand', 'Month'], as_index=False)
+                 .agg(
+                     price_chf_mean=('price_chf', 'mean'),
+                     price_chf_median=('price_chf', 'median'),
+                     listing_count=('price_chf', 'size'),
+                     # count how many brands there are, to pick those with enough months.
+                     mileage_mean=('mileage', 'mean'),
+                     engine_power_hp_mean=('engine_power_hp', 'mean'),
+                     consumption_l_per_100km_mean=('consumption_l_per_100km', 'mean')
+                 )
+    )
+
+    brand_month_summary = brand_month_summary.merge(
+        merged_df[['Month'] + commodity_cols].drop_duplicates(), 
+        # builds a table that holds one row per month with the commodity monthly-average columns.
+        on='Month',
+        how='left'
+    )
+
+    brand_month_summary['price_chf_mean'] = brand_month_summary['price_chf_mean'].round(0)
+    brand_month_summary['price_chf_median'] = brand_month_summary['price_chf_median'].round(0)
+    brand_month_summary['mileage_mean'] = brand_month_summary['mileage_mean'].round(0)
+    brand_month_summary['engine_power_hp_mean'] = brand_month_summary['engine_power_hp_mean'].round(0)
+    brand_month_summary['consumption_l_per_100km_mean'] = brand_month_summary['consumption_l_per_100km_mean'].round(2)
+
+    print("\nBrand–Month summary preview:")
+    print(brand_month_summary.head())
+
+    top_brands = (
+        brand_month_summary.groupby('brand')['listing_count']
+                           .sum()
+                           .sort_values(ascending=False)
+                           .head(10)
+    )
+    print("\nTop brands by total listings:")
+    print(top_brands)
+else:
+    print("merged_df not found. Run the merge cell first.")
+
+# Brand monthly data coverage summary, have a look first
+brand_coverage = (
+    brand_month_summary.assign(
+        has_all_commodities=brand_month_summary[commodity_cols].notna().all(axis=1)
+    )
+    # above adds a new column, has_all_commodities, to every brand–month row. That column is True when all the commodity monthly-average columns are present (non-missing) for that row, and False otherwise
+    .groupby('brand')
+    .agg(
+        listing_count_total=('listing_count', 'sum'),
+        months_total=('Month', 'nunique'),
+        months_with_commodities=('has_all_commodities', 'sum'),
+        first_month=('Month', 'min'),
+        last_month=('Month', 'max')
+    )
+    .sort_values('listing_count_total', ascending=False)
+)
+
+print("\nBrand coverage summary:")
+print(brand_coverage.head(20))
+
+# step2: limit to window where commodity monthly averages exist consistently (≈2020 onwards)
+analysis_window = brand_month_summary[brand_month_summary['Month'] >= '2020-01'].copy()
+
+analysis_window_coverage = (
+    analysis_window.assign(
+        has_all_commodities=analysis_window[commodity_cols].notna().all(axis=1)
+    ) # adds a new boolean column for each brand–month row, non-missing, the flag is True, otherwise False
+    .groupby('brand')
+    .agg(
+        listing_count_total=('listing_count', 'sum'),
+        months_total=('Month', 'nunique'),
+        months_with_commodities=('has_all_commodities', 'sum'),
+        first_month=('Month', 'min'),
+        last_month=('Month', 'max')
+    )
+    .sort_values('listing_count_total', ascending=False)
+)
+
+print("\nPost-2020 brand coverage summary:")
+print(analysis_window_coverage.head(20))
+
+# result: seems that only starting from 2020 01 commodity prices are available
+
+#%% Cell 5 Brand vs Commodity Exploration
+if 'analysis_window' in locals() and not analysis_window.empty:
+    min_months_required = 10
+    max_brands_to_plot = 12
+    coverage_sorted = analysis_window_coverage.sort_values('months_with_commodities', ascending=False)
+    candidate_brands = coverage_sorted[coverage_sorted['months_with_commodities'] >= min_months_required].index.tolist()
+    candidate_brands = candidate_brands[:max_brands_to_plot]  # keep charts readable
+
+    if candidate_brands:
+        print(
+            f"\nBrands used for plots (>= {min_months_required} months with commodities,"
+            f" max {max_brands_to_plot} brands): {candidate_brands}"
+        )
+
+        selected_df = analysis_window[analysis_window['brand'].isin(candidate_brands)].copy()
+
+        avg_price = selected_df.groupby('brand')['price_chf_mean'].mean().sort_values(ascending=False)
+
+        plt.figure(figsize=(10, 5))
+        plt.bar(avg_price.index, avg_price.values, color='steelblue')
+        plt.title('Average Monthly Car Price (Post-2020)')
+        plt.ylabel('Average price (CHF)')
+        plt.xticks(rotation=45, ha='right')
+        plt.tight_layout()
+        plt.show()
+
+        if commodity_cols:
+            max_commodities_to_plot = 6
+            for commodity in commodity_cols[:max_commodities_to_plot]:
+                corr_values = []
+                for brand in candidate_brands:
+                    brand_rows = selected_df[selected_df['brand'] == brand].sort_values('Month')
+                    correlation = brand_rows['price_chf_mean'].corr(brand_rows[commodity]) if commodity in brand_rows else None
+                    corr_values.append((brand, correlation))
+
+                corr_values = [(b, c) for b, c in corr_values if pd.notna(c)]
+                if corr_values:
+                    brands_corr, values_corr = zip(*corr_values)
+                    plt.figure(figsize=(10, 5))
+                    plt.bar(brands_corr, values_corr, color='darkorange')
+                    plt.axhline(0, color='black', linewidth=0.8)
+                    plt.title(f'Price vs {commodity} correlation')
+                    plt.ylabel('Pearson correlation')
+                    plt.xticks(rotation=45, ha='right')
+                    plt.tight_layout()
+                    plt.show()
+                else:
+                    print(f"Correlation could not be computed for {commodity} (insufficient variation).")
+
+            corr_rows = []
+            for brand in candidate_brands:
+                brand_rows = selected_df[selected_df['brand'] == brand].sort_values('Month')
+                row = {'brand': brand}
+                for commodity in commodity_cols:
+                    if commodity in selected_df.columns:
+                        row[commodity] = brand_rows['price_chf_mean'].corr(brand_rows[commodity])
+                corr_rows.append(row)
+
+            corr_matrix = pd.DataFrame(corr_rows).set_index('brand')
+            print("\nBrand vs commodity correlations (Pearson):")
+            print(corr_matrix)
+
+            if not corr_matrix.empty:
+                plt.figure(figsize=(1 + 0.6 * len(corr_matrix.columns), 0.6 * len(corr_matrix.index) + 2))
+                plt.imshow(corr_matrix.values, cmap='coolwarm', aspect='auto', vmin=-1, vmax=1)
+                plt.colorbar(label='Correlation')
+                plt.xticks(range(len(corr_matrix.columns)), corr_matrix.columns, rotation=45, ha='right')
+                plt.yticks(range(len(corr_matrix.index)), corr_matrix.index)
+                plt.title('Price vs Commodity Correlation Matrix')
+                plt.tight_layout()
+                plt.show()
+        else:
+            print("No commodity columns found for plotting.")
+    else:
+        print(f"No brands meet the >= {min_months_required} months threshold for commodity coverage.")
+else:
+    print("analysis_window not available. Run previous cells first.")
+
+# Conclusions
+"""
+Main Findings
+1. Brand-Specific Sensitivities Exist
+The correlation matrix reveals that commodity price relationships are not uniform across brands:
+
+Volvo shows the strongest positive correlations with multiple commodities (Copper: 0.52, Cobalt: 0.38), suggesting its used car prices track raw material costs more closely—likely due to premium positioning and EV/hybrid component mix.
+Porsche exhibits moderate positive correlations with Nickel (0.34) and other metals, consistent with luxury manufacturing using specialized materials.
+European mass-market brands (VW, Audi, Skoda) show minimal-to-moderate positive correlations with Copper and Steel, indicating minimal to moderate sensitivity to industrial metal prices.
+
+2. Negative Correlations in Asian Brands
+Toyota and Cupra display negative correlations across most commodities (Toyota: WTI -0.45, Nickel -0.39; Cupra: WTI -0.46, Cobalt -0.56).
+This suggests their used car prices moved inversely to commodity trends during 2020-2025, possibly due to:
+Different supply chain structures
+Pricing strategies that absorb cost fluctuations
+Product mix less dependent on volatile raw materials
+Market positioning focused on value/reliability over premium materials
+
+3. Luxury vs. Mass-Market Divergence
+Premium brands (Mercedes-Benz, BMW, Porsche) show mixed but generally weak correlations, suggesting their pricing power and brand equity may buffer them from direct commodity cost pass-through.
+Mass-market European brands show slightly stronger positive ties to industrial metals, indicating more direct exposure to manufacturing cost pressures.
+
+4. Commodity-Specific Patterns
+Copper emerges as the most consistently positive correlate across European brands, reflecting its widespread use in electrical systems and wiring.
+WTI (oil) shows negative correlations for several brands, possibly because higher fuel costs reduce demand for ICE vehicles, depressing their resale values.
+Battery metals (Lithium, Cobalt, Nickel) show varied patterns—strongest for brands with significant EV/hybrid portfolios (Volvo, Porsche).
+
+5. Limitations in RQ3 Conclusion
+Reliable commodity data only spans 2020-2025 (56 months max per brand), limiting ability to detect long-term trends or cyclical patterns.
+Time-series decomposition wasn't viable due to short series, so seasonal effects and structural breaks remain unexplored.
+Summary Statement for RQ3
+The relationship between commodity prices and used car values varies significantly across Swiss car brands. European premium and mass-market brands show mild-to-moderate positive correlations with industrial metals (especially Copper), while Asian brands exhibit negative correlations, suggesting different cost structures and pricing strategies. Volvo demonstrates the strongest sensitivity to battery metals, aligning with its electrification strategy. However, the post-2020 data window and brand-level aggregation limit deeper causal inference—brand equity, model mix, and market positioning appear to mediate commodity price impacts more than direct cost pass-through.
+"""
+
