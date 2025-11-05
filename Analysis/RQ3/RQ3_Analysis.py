@@ -397,7 +397,11 @@ if 'analysis_window' in locals() and not analysis_window.empty:
             print(corr_matrix)
 
             if not corr_matrix.empty:
-                fig_heatmap = plt.figure(figsize=(1 + 0.6 * len(corr_matrix.columns), 0.6 * len(corr_matrix.index) + 2))
+                base_width = 1 + 0.6 * len(corr_matrix.columns)
+                base_height = 0.6 * len(corr_matrix.index) + 2
+                width = max(10, 0.9 * base_width)
+                height = max(5, 1.1 * base_height)
+                fig_heatmap = plt.figure(figsize=(width, height))
                 plt.imshow(corr_matrix.values, cmap='coolwarm', aspect='auto', vmin=-1, vmax=1)
                 plt.colorbar(label='Correlation')
                 plt.xticks(range(len(corr_matrix.columns)), corr_matrix.columns, rotation=45, ha='right')
