@@ -1,3 +1,4 @@
+---
 title: "AutoCommodity Insights"
 subtitle: "Analyzing the Relationship Between Used Car Prices"
 author: "Group 206 — Dongyuan Gao, Ramiro Diez-Liebana, Cyriel Van Helleputte"
@@ -5,10 +6,6 @@ date: "November 2025"
 output:
   pdf_document:
     latex_engine: xelatex
-    toc: true
-    toc_depth: 2
-    number_sections: true
-  html_document:
     toc: true
     toc_depth: 2
     number_sections: true
