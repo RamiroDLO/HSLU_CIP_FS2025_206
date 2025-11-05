@@ -15,3 +15,8 @@ A lightweight toolkit to scrape Swiss used car(Autoscout24.ch) listings, pull co
 
 ## Documentation
 See `Documentation.rmd` for the full project narrative, feasibility notes, and methodology details.
+
+## Contributions
+Dongyuan Gao: Scraping, Data Processing, Analysis
+Cyriel Van Helleputte: Debugging for Scraper, Analysis, Git Organization
+Ramiro Diez-Liebana: API Integration, Data Processing, Analysis
