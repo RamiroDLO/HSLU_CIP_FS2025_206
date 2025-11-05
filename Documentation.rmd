@@ -191,9 +191,12 @@ In our feasibility study we set out three potential questions for the client:
 
 ## RQ3 — Brand-Level Differences
 
-1. **Volvo & Porsche Track Battery Metals** — Volvo prices co-move with Copper (~0.52) and Cobalt (~0.38), while Porsche aligns with Nickel (~0.34), underscoring the exposure of electrified and luxury lineups to battery-heavy alloys. *(Visual: `Analysis/RQ3/outputs/correlation_matrix_heatmap.png`)*
-2. **European Mass-Market Brands Show Mild Sensitivity** — VW, Audi, and Skoda maintain small positive links to copper and steel, suggesting moderate effect of industrial metal costs. *(Visual: `Analysis/RQ3/outputs/avg_price_by_brand.png`)*
-3. **Asian Brands move Differently** — Toyota and potentialy other Asian brands exhibit negative correlations with multiple commodities (WTI ≈ -0.45, Nickel ≈ -0.39), hinting at alternative supply strategies or value positioning that buffer raw material shocks. *(Visual: `Analysis/RQ3/outputs/correlation_Nickel.png`)*
+1. **Volvo & Porsche Track Battery Metals** — Volvo prices co-move with Copper (~0.52) and Cobalt (~0.38), while Porsche aligns with Nickel (~0.34), underscoring the exposure of electrified and luxury lineups to battery-heavy alloys.
+   ![Correlation matrix highlighting brand–metal relationships](Analysis/RQ3/outputs/correlation_matrix_heatmap.png){width=80%}
+2. **European Mass-Market Brands Show Mild Sensitivity** — VW, Audi, and Skoda maintain small positive links to copper and steel, suggesting moderate effect of industrial metal costs.
+   ![Average monthly price by brand](Analysis/RQ3/outputs/avg_price_by_brand.png){width=75%}
+3. **Asian Brands Move Differently** — Toyota and potentially other Asian brands exhibit negative correlations with multiple commodities (WTI ≈ -0.45, Nickel ≈ -0.39), hinting at alternative supply strategies or value positioning that buffer raw material shocks.
+   ![Brand correlations with Nickel](Analysis/RQ3/outputs/correlation_Nickel.png){width=75%}
 Overall, brand equity and product mix modulate how commodity swings influence Swiss used car prices.
 
 
