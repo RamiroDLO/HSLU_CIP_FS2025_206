@@ -41,10 +41,10 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 
 ## Project Overview
 
-### Driving Smarter Decisions in the Swiss Used Car Market
+###  Swiss Used Car Market and Commodity Prices Relationship Analysis
 
 #### The Storyline (Potential Business Problem)
-The Swiss used car market is highly competitive. Our **fictional client** AutoHelvetia AG, a leading national **used car dealer**, faces the challenge of optimizing their pricing & purchasing strategy. In recent years, commodity prices are volatile and affects pricing of cars.
+The Swiss used car market is highly competitive. Our **fictional client** AutoHelvetia AG, a leading national **used car dealer**, faces the challenge of optimizing their pricing & purchasing strategy. In recent years, commodity prices are volatile and affects pricing of cars. So AutoHelvetia AG delegated the task to us: to understand the relationship between used car prices and commodity prices.
 
 #### Our Solution
 This project delivers an **advanced data collection** and **anylsis** framework. Our goal is to collect valuable **market data** and uncover relationships between used car prices and key commodity markets. We develop a tool box using **web scraping of AutoScout24.ch** and integrating with **Yahoo Finance commodity data**, to provide AutoHelvetia AG data-driven insights for:
@@ -66,6 +66,7 @@ project_scraping_CIP_analysis_car_commodity_price/
 ├── Documentation.md         # This documentation file
 └── README.md                # Project overview
 ```
+#### Initiall Findings
 
 
 ## Feasibility Research
@@ -90,12 +91,45 @@ This web scraping project was evaluated for both technical and legal feasibility
 
 ## Data Collection
 
-### Web Scraping
-[Document the web scraping process, including:
-- Target websites
-- Scraping methodology
-- Data points collected
-- Frequency of updates]
+### Web Scraping Implementation
+
+#### Target Website
+- **Primary Source**: AutoScout24.ch (https://www.autoscout24.ch)
+- **Target Path**: `/de/autos/alle-marken` (All car listings)
+- **Scope**: Used car listings across all makes and models available on the platform
+
+#### Technical Implementation
+
+##### Core Technologies
+- **Selenium WebDriver**: For browser automation and dynamic content loading
+- **BeautifulSoup4**: For HTML parsing and data extraction
+- **Custom Parser**: Combines multiple extraction methods(json, html, css, regex) for robustness
+
+##### Scraping Methodology
+1. **Pagination Handling**:
+   - Iterates through listing pages systematically and click on next page
+   - Implements smart navigation with randomized delays (5-15s between pages)
+
+2. **Data Extraction Strategy**:
+   - **Primary Method**: Structure-aware parsing using SVG icon titles and sibling elements
+   - **Combination of Methods**:
+     - JSON structured data extraction
+     - CSS class-based element targeting
+     - Regular expression fallbacks for critical fields
+
+#### Data Points Collected
+
+| Data Field | Description | Example |
+|------------|-------------|---------|
+| `car_model` | Full vehicle make and model | "Volkswagen Golf 2.0 TDI" |
+| `price_chf` | Listing price in CHF | 25,900 |
+| `mileage` | Vehicle mileage in km | 85,200 |
+| `engine_power_hp` | Engine power in HP | 150 |
+| `power_mode` | Fuel/power type | Diesel, Petrol, Electric, Hybrid |
+| `transmission` | Transmission type | Automat, Manuell, Halbautomatik |
+| `production_date` | Production date | 2018 |
+| `listing_url` | Direct URL to the listing | [Link] |
+
 
 ### API Integration
 [Document the API integration, including:
