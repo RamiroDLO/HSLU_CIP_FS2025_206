@@ -1,30 +1,46 @@
-# AutoCommodity Insights
-*Analyzing the Relationship Between Used Car Prices —*
-*Powered by Autoscout24 Scraper & Yahoo Finance API*
-
-**Group 206**  
-*Dongyuan Gao, Ramiro Diez-Liebana, Cyriel Van Helleputte*  
-*Last Updated: November 2025*
-
+title: "AutoCommodity Insights"
+subtitle: "Analyzing the Relationship Between Used Car Prices"
+author: "Group 206 — Dongyuan Gao, Ramiro Diez-Liebana, Cyriel Van Helleputte"
+date: "November 2025"
+output:
+  pdf_document:
+    latex_engine: xelatex
+    toc: true
+    toc_depth: 2
+    number_sections: true
+  html_document:
+    toc: true
+    toc_depth: 2
+    number_sections: true
 ---
 
-## Table of Contents
-1. [Project Overview](#project-overview)
-2. [Project Structure](#project-structure)
-3. [Setup and Installation](#setup-and-installation)
-4. [Data Collection](#data-collection)
-   - [Web Scraping](#web-scraping)
-   - [API Integration](#api-integration)
-5. [Data Processing](#data-processing)
-6. [Analysis and Methodology](#analysis-and-methodology)
-   - [Research Questions](#research-questions)
-   - [Methodology](#methodology)
-7. [Results and Findings](#results-and-findings)
-8. [Conclusion and Future Work](#conclusion-and-future-work)
-9. [References](#references)
-10. [Appendices](#appendices)
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
 
----
+<div style="text-align: center; font-size: 1.05em;">
+<em>Powered by Autoscout24 Scraper & Yahoo Finance API</em>
+</div>
+
+```{=latex}
+\vspace{8pt}
+```
+
+**Group 206**
+
+```{=latex}
+\vspace{4pt}
+```
+
+*Dongyuan Gao · Ramiro Diez-Liebana · Cyriel Van Helleputte*
+
+```{=latex}
+\vspace{12pt}\hrule\vspace{12pt}
+```
+
+```{=latex}
+\newpage
+```
 
 ## Project Overview
 [Provide a brief overview of the project, its objectives, and its significance.]
