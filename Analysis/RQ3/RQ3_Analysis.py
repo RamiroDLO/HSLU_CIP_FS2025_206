@@ -39,7 +39,7 @@ if 'df1' in locals() and 'df2' in locals():
     autoscout = df1.copy() # Copy dfs to avoid modifying original dfs
     commodities = df2.copy()
 
-# ----- when final cleaning script is finished again by Cyriel, as discussed this lunch, this temporary part can be deleted or adjusted, if missing values are all dealt with
+# ----- Data cleansing pipeline: harmonise Autoscout listings and commodity data before analysis -----
     
     # Step 1: check missing values, general cleaning
     # coerce "Neues Fahrzeug" entries and standardize production dates

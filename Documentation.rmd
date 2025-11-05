@@ -89,7 +89,7 @@ This web scraping project was evaluated for both technical and legal feasibility
 - **Potential Conclusions**: The project can provide potential valuable insights into the relationship between used car prices and commodity prices, helping stakeholders make informed decisions
 
 
-# Data Collection
+# Data Sources & Collection
 
 ## Web Scraping Implementation
 
@@ -131,7 +131,7 @@ This web scraping project was evaluated for both technical and legal feasibility
 | `listing_url` | Direct URL to the listing | [Link] |
 
 
-## API Integration
+## Yahoo FinanceAPI Integration
 [Document the API integration, including:
 - APIs used (Yahoo Finance, etc.)
 - Authentication process
@@ -173,12 +173,30 @@ Across the project we apply a standard data-science cleaning cadence: validate d
   - Keeps `_Monthly_Avg` features and drops duplicates for consistent joins.
 - **Merge Output**: Produces `Final_Merged_Data_RQ3.csv`, the **master clean dataset**
 
-# Analysis and Methodology
+# Analysis & Visualization
 
 ## Research Questions
+In our feasibility study we set out three potential questions for the client:
+
+1. **RQ1 — Commodity Index vs. Used Car Prices**: How do used car prices in Switzerland correlate with historical commodity price indices for key automotive materials (steel, aluminum, copper, crude oil)? We can construct a weighted composite commodity index and examine Pearson/Spearman correlations with median used car prices while controlling for vehicle age and mileage.
+2. **RQ2 — Powertrain Sensitivity**: Do different vehicle power modes (petrol, diesel, electric, hybrid) exhibit distinct sensitivity to commodity price movements? We expect electric vehicles to react more to battery metals, while ICE vehicles respond to energy and structural metals.
+3. **RQ3 — Brand-Level Differences**: How does the relationship between commodity prices and used car values vary across popular Swiss car brands? We segment by brand to detect whether luxury vs. volume manufacturers show different exposure to raw material cost pressures.
 
 
 # Results and Findings
+
+## RQ1 — Commodity Index vs. Used Car Prices
+
+## RQ2 — Powertrain Sensitivity
+
+## RQ3 — Brand-Level Differences
+
+1. **Volvo & Porsche Track Battery Metals** — Volvo prices co-move with Copper (~0.52) and Cobalt (~0.38), while Porsche aligns with Nickel (~0.34), underscoring the exposure of electrified and luxury lineups to battery-heavy alloys. *(Visual: `Analysis/RQ3/outputs/correlation_matrix_heatmap.png`)*
+2. **European Mass-Market Brands Show Mild Sensitivity** — VW, Audi, and Skoda maintain small positive links to copper and steel, suggesting moderate effect of industrial metal costs. *(Visual: `Analysis/RQ3/outputs/avg_price_by_brand.png`)*
+3. **Asian Brands move Differently** — Toyota and potentialy other Asian brands exhibit negative correlations with multiple commodities (WTI ≈ -0.45, Nickel ≈ -0.39), hinting at alternative supply strategies or value positioning that buffer raw material shocks. *(Visual: `Analysis/RQ3/outputs/correlation_Nickel.png`)*
+Overall, brand equity and product mix modulate how commodity swings influence Swiss used car prices.
+
+
 
 [Present key findings, including:]
 1. [Research Question 1]
@@ -190,5 +208,8 @@ Across the project we apply a standard data-science cleaning cadence: validate d
 - Limitations
 
 # Conclusion and Limitations
+## Conclusion
+## Recommendations for our Client
+## Limitations
 [Provide conclusions and potential future improvements]
 
