@@ -135,7 +135,7 @@ This web scraping project was evaluated for both technical and legal feasibility
 - Data retrieval methods
 - Rate limits and handling]
 
-# Data Processing
+# Data Transformation and Cleaning
 [Document the data processing pipeline, including:
 - Data cleaning steps
 - Data transformation
