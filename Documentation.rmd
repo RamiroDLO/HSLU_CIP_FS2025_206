@@ -227,24 +227,27 @@ Eventually things would rebound, making the index climb sharply, while both EV a
 
 ## RQ3 — Brand-Level Differences
 
-1. **Volvo & Porsche Track Battery Metals** — Volvo prices co-move with Copper (~0.52) and Cobalt (~0.38), while Porsche aligns with Nickel (~0.34), underscoring the exposure of electrified and luxury lineups to battery-heavy alloys.
+1. **Main Finding — Brand-Specific Sensitivities Exist**: The correlation matrix shows clear variation across brands —Volvo and Porsche price correlate positively on battery metals, while brands like Toyota and Cupra price correlate negatively. These asymmetries confirm that commodity shocks affect brands unevenly in the Swiss used-car market.
 
    \begin{center}
-   \includegraphics[width=0.62\linewidth]{Analysis/RQ3/outputs/correlation_matrix_heatmap.png}
+   \includegraphics[width=0.60\linewidth]{Analysis/RQ3/outputs/correlation_matrix_heatmap.png}
    \end{center}
 
-2. **European Mass-Market Brands Show Mild Sensitivity** — VW, Audi, and Skoda maintain small positive links to copper and steel, suggesting moderate effect of industrial metal costs.
-
-   \begin{center}
-   \includegraphics[width=0.72\linewidth]{Analysis/RQ3/outputs/avg_price_by_brand.png}
-   \end{center}
-
-3. **Asian Brands Move Differently** — Toyota and potentially other Asian brands exhibit negative correlations with multiple commodities (WTI ≈ -0.45, Nickel ≈ -0.39), hinting at alternative supply strategies or value positioning that buffer raw material shocks.
+2. **Conclusion #1 — Luxury vs. Mass-Market Divergence**: Premium brands (Mercedes-Benz, BMW, Porsche) show mixed but generally weak correlations, suggesting their pricing power and brand equity may buffer them from direct commodity cost pass-through.
+Mass-market European brands show slightly stronger positive ties to industrial metals, indicating more direct exposure to manufacturing cost pressures.
 
    \begin{center}
    \includegraphics[width=0.72\linewidth]{Analysis/RQ3/outputs/correlation_Nickel.png}
    \end{center}
-Overall, brand equity and product mix modulate how commodity swings influence Swiss used car prices.
+
+3. **Conclusion #2 — Commodity-Specific Patterns**: Copper emerges as the most consistently positive correlate across European brands, reflecting its widespread use in electrical systems and wiring.
+WTI (oil) shows negative correlations for several brands, possibly because higher fuel costs reduce demand for ICE vehicles, depressing their resale values.
+Battery metals (Lithium, Cobalt, Nickel) show varied patterns—strongest for brands with significant EV/hybrid or high-end portfolios (Volvo, Porsche).
+
+   \begin{center}
+   \includegraphics[width=0.72\linewidth]{Analysis/RQ3/outputs/correlation_Copper.png}
+   \end{center}
+
 
 
 # Conclusion and Limitations
@@ -259,8 +262,17 @@ The results suggest **moderate correlation between commodity prices and the medi
 
 For our fictional client, we have the folliwng findings:
 
+For RQ1, we recommend:
 - **Timing Inventory Purchases**: Monitor battery metal prices (especially copper and cobalt) when acquiring electrified premium brands.
 - **Pricing Models**: Incorporate commodity indices as leading indicators, particularly for luxury and EV segments.
+
+For RQ3's brand-commodity dynamics, we recommend:
+1. **Strategic Inventory Allocation**:
+   - Increase Volvo/Porsche acquisitions when battery metals dip (copper < $8k/ton, cobalt < $30k/ton)
+   - Favor Toyota/Cupra stock during commodity bull markets as their pricing resists raw material inflation
+2. **Brand-Specific Pricing Strategies**:
+   - Build commodity surcharges into mass-market European (VW, Skoda) pricing models
+   - Maintain premium pricing stability for luxury brands (BMW, Mercedes) regardless of material cost swings
 
 ## Limitations
 
@@ -268,5 +280,3 @@ For our fictional client, we have the folliwng findings:
 - **Causality**: Correlations do not establish causal relationships; confounding factors like consumer preferences and policy changes were not fully controlled.
 - **Geographic Scope**: Limited to the Swiss market, which may exhibit unique characteristics not generalizable to other regions.
 - **Data Quality**: Web-scraped data subject to listing inconsistencies and potential sampling bias toward certain brands or price ranges. API Connection to market-ready sources such as CME’s API, Shanghai Metals, or Bloomberg Terminal would be ideal.
-
-
