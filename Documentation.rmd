@@ -40,11 +40,19 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 ```
 
 ## Project Overview
-[Provide a brief overview of the project, its objectives, and its significance.]
 
-## Feasibility Research
+### Driving Smarter Decisions in the Swiss Used Car Market
 
-## Project Structure
+#### The Storyline (Potential Business Problem)
+The Swiss used car market is highly competitive. Our **fictional client** AutoHelvetia AG, a leading national **used car dealer**, faces the challenge of optimizing their pricing & purchasing strategy. In recent years, commodity prices are volatile and affects pricing of cars.
+
+#### Our Solution
+This project delivers an **advanced data collection** and **anylsis** framework. Our goal is to collect valuable **market data** and uncover relationships between used car prices and key commodity markets. We develop a tool box using **web scraping of AutoScout24.ch** and integrating with **Yahoo Finance commodity data**, to provide AutoHelvetia AG data-driven insights for:
+
+- **Optimize Pricing Strategies**
+- **Gain Competitive Advantage**
+
+#### Project Structure
 ```
 project_scraping_CIP_analysis_car_commodity_price/
 ├── Analysis/                # Analysis notebooks and scripts
@@ -59,12 +67,26 @@ project_scraping_CIP_analysis_car_commodity_price/
 └── README.md                # Project overview
 ```
 
-## Setup and Installation
-[Provide installation instructions, including:
-- Python version requirements
-- Required packages (with versions)
-- Environment setup
-- Configuration needed]
+
+## Feasibility Research
+
+### Ethical Feasibility of Web Scraping AutoScout24.ch
+
+This web scraping project was evaluated for both technical and legal feasibility. We focused on the academic research context and our analysis of AutoScout24.ch's robots.txt file and terms of service indicates that the project operates within acceptable boundaries for academic research purposes.
+- **robots.txt Analysis**:
+  - Allowed: General listing pages without filters
+  - Restricted: User account pages (`/de/account/`, `/de/member/`)
+  - Restricted: Filtered search results with specific URL parameters (e.g., `sort=`, `pricefrom=`)
+  - Restricted: Administrative functions
+
+#### Technical Feasibility
+- **Data Extraction**: Ethically extracts vehicle specifications, pricing, and listing details with Scraper and Yahoo Finance API, involving selenium and beautifulsoup.
+- **Data Availability**: We found consistent and abundant data, which is appropriate for analysis for both used car listings and Commodity Data
+
+#### Analytical Feasibility
+- **Statistical Methods**: Appropriate statistical methods can be appllied for analysis, including correlation analysis, regression analysis, and time series analysis, etc.
+- **Potential Conclusions**: The project can provide potential valuable insights into the relationship between used car prices and commodity prices, helping stakeholders make informed decisions
+
 
 ## Data Collection
 
