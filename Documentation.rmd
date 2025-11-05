@@ -175,14 +175,15 @@ Across the project we apply a standard data-science cleaning cadence: validate d
 
 
 # Results and Findings
-[Present key findings, including:[
+
+[Present key findings, including:]
 1. [Research Question 1]
 2. [Research Question 2]
 3. [Research Question 3]
 - Summary statistics
 - Visualizations
 - Key insights
-- Limitations]
+- Limitations
 
 # Conclusion and Limitations
 [Provide conclusions and potential future improvements]
