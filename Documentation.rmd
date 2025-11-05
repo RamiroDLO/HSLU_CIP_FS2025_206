@@ -82,11 +82,11 @@ This web scraping project was evaluated for both technical and legal feasibility
 
 ### Technical Feasibility
 - **Data Extraction**: Ethically extracts vehicle specifications, pricing, and listing details with Scraper and Yahoo Finance API, involving selenium and beautifulsoup.
-- **Data Availability**: We found consistent and abundant data, which is appropriate for analysis for both used car listings and Commodity Data
+- **Data Availability**: We found consistent and abundant data, which is appropriate for analysis for both used car listings and Commodity Data.
 
 ### Analytical Feasibility
 - **Statistical Methods**: Appropriate statistical methods can be appllied for analysis, including correlation analysis, regression analysis, and time series analysis, etc.
-- **Potential Conclusions**: The project can provide potential valuable insights into the relationship between used car prices and commodity prices, helping stakeholders make informed decisions
+- **Potential Conclusions**: The project can provide potential valuable insights into the relationship between used car prices and commodity prices, helping stakeholders make informed decisions.
 
 
 # Data Sources & Collection
@@ -94,28 +94,28 @@ This web scraping project was evaluated for both technical and legal feasibility
 ## Web Scraping Implementation
 
 ### Target Website
-- **Primary Source**: AutoScout24.ch (https://www.autoscout24.ch)
-- **Target Path**: `/de/autos/alle-marken` (All car listings)
-- **Scope**: Used car listings across all makes and models available on the platform
+- **Primary Source**: AutoScout24.ch (https://www.autoscout24.ch).
+- **Target Path**: `/de/autos/alle-marken` (All car listings).
+- **Scope**: Used car listings across all makes and models available on the platform.
 
 ### Technical Implementation
 
 #### Core Toolkits
-- **Selenium WebDriver**: For browser automation and dynamic content loading
-- **BeautifulSoup4**: For HTML parsing and data extraction
-- **Custom Parser**: Combines multiple extraction methods(json, html, css, regex) for robustness
+- **Selenium WebDriver**: For browser automation and dynamic content loading.
+- **BeautifulSoup4**: For HTML parsing and data extraction.
+- **Custom Parser**: Combines multiple extraction methods(json, html, css, regex) for robustness.
 
 #### Scraping Methodology
 1. **Pagination Handling**:
-   - Iterates through listing pages systematically and click on next page
-   - Implements smart navigation with randomized delays (5-15s between pages)
+   - Iterates through listing pages systematically and click on next page.
+   - Implements smart navigation with randomized delays (5-15s between pages).
 
 2. **Data Extraction Strategy**:
-   - **Primary Method**: Structure-aware parsing using SVG icon titles and sibling elements
+   - **Primary Method**: Structure-aware parsing using SVG icon titles and sibling elements.
    - **Combination of Methods**:
-     - JSON structured data extraction
-     - CSS class-based element targeting
-     - Regular expression fallbacks for critical fields
+     - JSON structured data extraction.
+     - CSS class-based element targeting.
+     - Regular expression fallbacks for critical fields.
 
 ### Data Points Collected
 
@@ -132,46 +132,75 @@ This web scraping project was evaluated for both technical and legal feasibility
 
 
 ## Yahoo FinanceAPI Integration
-[Document the API integration, including:
-- APIs used (Yahoo Finance, etc.)
-- Authentication process
-- Data retrieval methods
-- Rate limits and handling]
+
+We fed our commodity pipeline using the **yfinance Python library**. This library (over 20k stars in Github, (https://github.com/ranaroussi/yfinance)) gives access Yahoo Finance's public endpoints **without requiring API authentication**.It is not affiliated, to Yahoo, Inc. It's an **open-source tool that uses Yahoo's publicly available APIs**. 
+
+### Technical Implementation
+
+fetched historical **daily closing prices** for all tickers in the list from Yahoo Finance. If it doesn’t find closing price, it falls back to an adj close column. 
+
+The core yfinance function used is `yf.download()`. It fetches historical daily closing prices for all tickers in the list from Yahoo Finance. If it doesn’t find closing price, it falls back to an adj close column. 
+
+### Data Points Collected
+
+| Data Field                | Description                                  | Example      |
+|---------------------------|----------------------------------------------|--------------|
+| `Date`                    | Trading day                                   |`2024-07-31`|
+| `Month`                   | Month and year in `MM-YYYY` format             | `07-2024`|
+| `WTI_Spot`                | Closing price of crude oil (`CL=F`)            | `81.32`  |
+| `Copper_Spot`             | Closing price of COMEX copper futures (`HG=F`) | `4.32`   |
+| `Lithium_Spot`            | Proxy for lithium prices (`LIT`)               | `57.89`  |
+| `Aluminium_Spot`          | Closing price of LME aluminum futures (`ALI=F`)| `2235.00`|
+| `Steel_Spot`              | Closing price of U.S. steel futures (`HRC=F`)  | `1015.00`|
+| `Nickel_Spot`             | Global nickel prices –  (`NIC.AX`)             | `17345.00`|
+| `Cobalt_Spot`             | Proxy for cobalt prices –  (`603799.SS`)       | `92.40`  |
+
+- **Rate limits and handling**: While it does not have official request limits to call the tool, it still accesses Yahoo, and if the website implements changes or rate limits per IP or token that could be a problem with a more frequent use of the tool.
 
 # Data Transformation and Cleaning
 
 Across the project we apply a standard data-science cleaning cadence: validate dataframe, coerce types, handle missing values with data quality strategies, and normalize key features before exporting analysis-ready datasets.
 
-### 1. Autoscout Listing Standardization
+### Autoscout Listing Standardization
 *Script:* `Data/clean_data/Autoscout_Cleaner_Standardizer.py`
+
 - **Brand & Model Extraction**: Uses regex-based patterns to parse the `car_model` field into `brand` and base `model` tokens, removing unwanted information (e.g., VW TIGUAN TSI 2.0 S VERSION BERN TOP ZUSTAND vs VW TIGUAN TSI 2.0 S).
+
 - **Model Normalization**: Applies a replacement dictionary to outlier variants (e.g., “TESLA Model Y” → “Model Y”). Keeping consistent models during analysis.
+
 - **Field Selection & Export**: Outputs a curated schema (`brand`, `model`, `car_model`, pricing, powertrain, and URL fields) to `Autoscout_Cleaned_Standardized.csv`, preserving only analytics-ready columns.
 
-### 2. Commodity Price Cleaning
+### Commodity Price Cleaning
 *Script:* `Data/clean_data/load_data_cleaning.py`
+
 - **Type Coercion**: Converts `Date` to datetime and commodity columns to numeric by replacing European decimal separators.
+
 - **Missing Value Strategy**:
   - Reports gaps before/after processing for clarity.
   - Fills missing commodity prices with a 7-day rolling mean, then rounds to two decimals.
+
 - **Temporal Date Standardization**: Generates a formatted `Date` string (`%d-%m-%Y`) for later joins and saves the cleaned series as `Data/Final Data/yahoo_spot_cleaned.csv`.
 
-### 3. Scraper Output Post-processing
+### Scraper Output Post-processing
 *Script:* `Data/Scraping/Scraper.py`
 - **Schema Consistency**: The scraper normalizes fuel types, transmission labels, and numeric fields (“N/A” fallbacks) to reduce later data cleaning steps.
+
 - **Hybrid Extraction**: Combines JSON-LD fields with HTML parsing, ensuring critical attributes (`price_chf`, `mileage`, `production_date`, `listing_url`, etc.) are captured.
 
-### 4. Research Dataset Post-Processing
+### Research Dataset Post-Processing
 *Script:* `Analysis/RQ3/RQ3_Analysis.py`
 - **Autoscout Cleaning & Missing Value Imputation**:
+
   - Converts `production_date` strings (including “Neues Fahrzeug”) to October 2025 and makes a `Month` period column.
   - Imputes continuous fields (`price_chf`, `mileage`, `engine_power_hp`) with rounded means.
   - Customized fill for `consumption_l_per_100km` (EV=0, then model mean, brand mean, global mean).
   - Categorical fills (`power_mode`, `transmission`) based on model majority vote, defaulting to “Unknown”.
+
 - **Commodity Cleaning & Missing Value Imputation**:
   - Builds monthly periods, fills gaps from daily `Date` entries, and aggregates to one row per month.
   - Keeps `_Monthly_Avg` features and drops duplicates for consistent joins.
-- **Merge Output**: Produces `Final_Merged_Data_RQ3.csv`, the **master clean dataset**
+
+- **Merge Output**: Produces `Final_Merged_Data_RQ3.csv`, the **master clean dataset**.
 
 # Analysis & Visualization
 
@@ -186,6 +215,13 @@ In our feasibility study we set out three potential questions for the client:
 # Results and Findings
 
 ## RQ1 — Commodity Index vs. Used Car Prices
+
+The index is rebased at **January 2020**, shortly before most commodities tanked 40 or 50% and resources so important like oil were traded at negative values (suppliers had to incentivize buyers with negative prices to clear out their reserves). 
+Eventually things would rebound, making the index climb sharply, while both EV and combustion-engined median prices remained relatively flat during the length of the analysis. 
+
+  \begin{center}
+  \includegraphics[width=0.85\linewidth]{Analysis/RQ1/RQ1_timeseries.png}
+  \end{center}
 
 ## RQ2 — Powertrain Sensitivity
 
@@ -211,19 +247,26 @@ In our feasibility study we set out three potential questions for the client:
 Overall, brand equity and product mix modulate how commodity swings influence Swiss used car prices.
 
 
-
-[Present key findings, including:]
-1. [Research Question 1]
-2. [Research Question 2]
-3. [Research Question 3]
-- Summary statistics
-- Visualizations
-- Key insights
-- Limitations
-
 # Conclusion and Limitations
 ## Conclusion
+
+This project aimed to analyze the relationship between used car prices and commodity markets in Switzerland. Through web scraping AutoScout24.ch and integrating Yahoo Finance commodity data, we uncovered interesting relationships into how raw material costs influence the Swiss used car market.
+
+The results suggest **moderate correlation between commodity prices and the median price of used vehicles**, but the magnitude and direction vary substantially by brand and powertrain type. The composite commodity index peaked in 2021–2022 before normalizing, while used car prices remained relatively stable—suggesting that consumer behavior, policy incentives, and supply chain factors play equally important roles alongside raw material costs.
+
+
 ## Recommendations for our Client
+
+For our fictional client, we have the folliwng findings:
+
+- **Timing Inventory Purchases**: Monitor battery metal prices (especially copper and cobalt) when acquiring electrified premium brands.
+- **Pricing Models**: Incorporate commodity indices as leading indicators, particularly for luxury and EV segments.
+
 ## Limitations
-[Provide conclusions and potential future improvements]
+
+- **Temporal Scope**: Analysis covers 2020–2025, a period marked by extraordinary events (pandemic, supply chain disruptions) that may not represent typical market conditions.
+- **Causality**: Correlations do not establish causal relationships; confounding factors like consumer preferences and policy changes were not fully controlled.
+- **Geographic Scope**: Limited to the Swiss market, which may exhibit unique characteristics not generalizable to other regions.
+- **Data Quality**: Web-scraped data subject to listing inconsistencies and potential sampling bias toward certain brands or price ranges. API Connection to market-ready sources such as CME’s API, Shanghai Metals, or Bloomberg Terminal would be ideal.
+
 
