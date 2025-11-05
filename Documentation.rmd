@@ -1,13 +1,13 @@
 ---
-title: "AutoCommodity Insights"
-subtitle: "Analyzing the Relationship Between Used Car Prices"
+title: "AutoCommodity Data Collection & Analysis"
+subtitle: "Analyzing the Relationship Between Used Car & Commodity Prices"
 author: "Group 206 — Dongyuan Gao, Ramiro Diez-Liebana, Cyriel Van Helleputte"
 date: "November 2025"
 output:
   pdf_document:
     latex_engine: xelatex
     toc: true
-    toc_depth: 2
+    toc_depth: 3
     number_sections: true
 ---
 
@@ -15,9 +15,7 @@ output:
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 ```
 
-<div style="text-align: center; font-size: 1.05em;">
-<em>Powered by Autoscout24 Scraper & Yahoo Finance API</em>
-</div>
+
 
 ```{=latex}
 \vspace{8pt}
@@ -39,20 +37,19 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 \newpage
 ```
 
-## Project Overview
 
-###  Swiss Used Car Market and Commodity Prices Relationship Analysis
+# Project Overview
 
-#### The Storyline (Potential Business Problem)
+## The Storyline (Potential Business Problem)
 The Swiss used car market is highly competitive. Our **fictional client** AutoHelvetia AG, a leading national **used car dealer**, faces the challenge of optimizing their pricing & purchasing strategy. In recent years, commodity prices are volatile and affects pricing of cars. So AutoHelvetia AG delegated the task to us: to understand the relationship between used car prices and commodity prices.
 
-#### Our Solution
+## Our Solution
 This project delivers an **advanced data collection** and **anylsis** framework. Our goal is to collect valuable **market data** and uncover relationships between used car prices and key commodity markets. We develop a tool box using **web scraping of AutoScout24.ch** and integrating with **Yahoo Finance commodity data**, to provide AutoHelvetia AG data-driven insights for:
 
 - **Optimize Pricing Strategies**
 - **Gain Competitive Advantage**
 
-#### Project Structure
+## Project Structure
 ```
 project_scraping_CIP_analysis_car_commodity_price/
 ├── Analysis/                # Analysis notebooks and scripts
@@ -66,12 +63,12 @@ project_scraping_CIP_analysis_car_commodity_price/
 ├── Documentation.md         # This documentation file
 └── README.md                # Project overview
 ```
-#### Initiall Findings
+## Initiall Findings
 
 
-## Feasibility Research
+# Feasibility Research
 
-### Ethical Feasibility of Web Scraping AutoScout24.ch
+## Ethical Feasibility of Web Scraping AutoScout24.ch
 
 This web scraping project was evaluated for both technical and legal feasibility. We focused on the academic research context and our analysis of AutoScout24.ch's robots.txt file and terms of service indicates that the project operates within acceptable boundaries for academic research purposes.
 - **robots.txt Analysis**:
@@ -80,32 +77,32 @@ This web scraping project was evaluated for both technical and legal feasibility
   - Restricted: Filtered search results with specific URL parameters (e.g., `sort=`, `pricefrom=`)
   - Restricted: Administrative functions
 
-#### Technical Feasibility
+### Technical Feasibility
 - **Data Extraction**: Ethically extracts vehicle specifications, pricing, and listing details with Scraper and Yahoo Finance API, involving selenium and beautifulsoup.
 - **Data Availability**: We found consistent and abundant data, which is appropriate for analysis for both used car listings and Commodity Data
 
-#### Analytical Feasibility
+### Analytical Feasibility
 - **Statistical Methods**: Appropriate statistical methods can be appllied for analysis, including correlation analysis, regression analysis, and time series analysis, etc.
 - **Potential Conclusions**: The project can provide potential valuable insights into the relationship between used car prices and commodity prices, helping stakeholders make informed decisions
 
 
-## Data Collection
+# Data Collection
 
-### Web Scraping Implementation
+## Web Scraping Implementation
 
-#### Target Website
+### Target Website
 - **Primary Source**: AutoScout24.ch (https://www.autoscout24.ch)
 - **Target Path**: `/de/autos/alle-marken` (All car listings)
 - **Scope**: Used car listings across all makes and models available on the platform
 
-#### Technical Implementation
+### Technical Implementation
 
-##### Core Technologies
+#### Core Technologies
 - **Selenium WebDriver**: For browser automation and dynamic content loading
 - **BeautifulSoup4**: For HTML parsing and data extraction
 - **Custom Parser**: Combines multiple extraction methods(json, html, css, regex) for robustness
 
-##### Scraping Methodology
+#### Scraping Methodology
 1. **Pagination Handling**:
    - Iterates through listing pages systematically and click on next page
    - Implements smart navigation with randomized delays (5-15s between pages)
@@ -117,7 +114,7 @@ This web scraping project was evaluated for both technical and legal feasibility
      - CSS class-based element targeting
      - Regular expression fallbacks for critical fields
 
-#### Data Points Collected
+### Data Points Collected
 
 | Data Field | Description | Example |
 |------------|-------------|---------|
@@ -131,52 +128,52 @@ This web scraping project was evaluated for both technical and legal feasibility
 | `listing_url` | Direct URL to the listing | [Link] |
 
 
-### API Integration
+## API Integration
 [Document the API integration, including:
 - APIs used (Yahoo Finance, etc.)
 - Authentication process
 - Data retrieval methods
 - Rate limits and handling]
 
-## Data Processing
+# Data Processing
 [Document the data processing pipeline, including:
 - Data cleaning steps
 - Data transformation
 - Handling missing values
 - Data validation]
 
-## Analysis and Methodology
+# Analysis and Methodology
 
-### Research Questions
+## Research Questions
 1. [Research Question 1]
 2. [Research Question 2]
 3. [Research Question 3]
 
-### Methodology
+## Methodology
 [Describe the analytical methods used, including:
 - Statistical methods
 - Machine learning models (if any)
 - Validation techniques]
 
-## Results and Findings
+# Results and Findings
 [Present key findings, including:
 - Summary statistics
 - Visualizations
 - Key insights
 - Limitations]
 
-## Conclusion and Future Work
+# Conclusion and Future Work
 [Provide conclusions and potential future improvements]
 
-## References
+# References
 [List all references and data sources]
 
-## Appendices
-### A. Data Dictionary
+# Appendices
+## A. Data Dictionary
 [Document the structure and meaning of all data fields]
 
-### B. Troubleshooting
+## B. Troubleshooting
 [Common issues and solutions]
 
-### C. Contributing
+## C. Contributing
 [Guidelines for contributing to the project]
