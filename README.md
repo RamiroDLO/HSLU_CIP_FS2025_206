@@ -19,10 +19,11 @@ project_scraping_CIP_analysis_car_commodity_price/
 │   ├── API_data_pull/       # API-fetched commodity data & script
 │   ├── clean_data/          # Processed and cleaned datasets & script
 │   └── Scraping/            # Web scraped data and scripts & scraper script
-├── Documentation.pdf         # This documentation file
-└── README.md                # Project overview
-├── AI_Disclosure.md         # This documentation file
-└── .gitignore
+├── Documentation.pdf        # This documentation file
+├── README.md                # Project overview
+├── AI_Disclosure.md         # Gen AI usage disclosure and guidelines
+├── requirements.txt         # Project dependencies
+└── .gitignore               # Git ignore file
 
 
 ## Getting Started
