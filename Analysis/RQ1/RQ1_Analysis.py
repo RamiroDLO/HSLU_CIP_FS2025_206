@@ -43,23 +43,9 @@ weights = {  # only used if we must rebuild composite
     'Lithium_Spot_Monthly_Avg': 0.15,
 }
 
-# 3) COMPOSITE INDEX (use existing; rebuild only if missing)
-print("\n[2] Checking Composite_Index...")
-if 'Composite_Index' not in df.columns:
-    print("   Composite_Index missing → rebuilding (base=first non-null of each series).")
-    # index each monthly series to base=100 and weight
-    comp = 0.0
-    for col in commodity_cols:
-        s = df[col]
-        base = s.dropna().iloc[0]
-        idx = (s / base) * 100.0
-        df[f"{col}_indexed"] = idx
-        comp = comp + idx * weights.get(col, 0.0)
-    df['Composite_Index'] = comp
-else:
-    print("   Composite_Index present.")
 
-# 4) MONTHLY AGG (one row per Month)
+
+# 3) MONTHLY AGG (one row per Month)
 print("\n[3] Aggregating to monthly level...")
 agg_map = {"price_chf": ["median","mean","count"], "mileage": "mean"}
 use_cols = ['Month','price_chf','mileage','Composite_Index'] + commodity_cols
@@ -83,6 +69,24 @@ def _to_month(s):
         except: pass
     return pd.NaT
 monthly["Month_Date"] = monthly["Month"].apply(_to_month)
+
+# 4) COMPOSITE INDEX (use existing; rebuild only if missing)
+print("\n[2] Checking Composite_Index...")
+if 'Composite_Index' not in df.columns:
+    print("   Composite_Index missing → rebuilding (base=first non-null of each series).")
+    # index each monthly series to base=100 and weight
+    comp = 0.0
+    for col in commodity_cols:
+        s = df[col]
+        base = s.dropna().iloc[0]
+        idx = (s / base) * 100.0
+        df[f"{col}_indexed"] = idx
+        comp = comp + idx * weights.get(col, 0.0)
+    df['Composite_Index'] = comp
+else:
+    print("   Composite_Index present.")
+
+
 
 # 5) CORRELATIONS (drop NA pairs)
 print("\n[4] Computing correlations...")
@@ -113,8 +117,6 @@ for col in commodity_cols:
 # 6) PLOTS
 print("\n[5] Creating visualizations...")
 
-# --- Time series (dual axis)
-
 # --- Filter from 2020-01-01 and sort
 start_date = pd.Timestamp("2020-01-01")
 monthly_filtered = (
@@ -122,6 +124,18 @@ monthly_filtered = (
            .sort_values("Month_Date")
            .copy()
 )
+
+# --- INDEX PRICES TO BASE 100 AT 2020-01 ---
+base_jan_2020 = monthly_filtered[monthly_filtered["Month_Date"] == start_date]
+
+if len(base_jan_2020) > 0:
+    base_composite = base_jan_2020["Composite_Index"].iloc[0]
+    monthly_filtered["Composite_Index_Indexed"] = (monthly_filtered["Composite_Index"] / base_composite) * 100
+else:
+    # If no data at exactly 2020-01, use first available
+    base_composite = monthly_filtered["Composite_Index"].iloc[0]
+    monthly_filtered["Composite_Index_Indexed"] = (monthly_filtered["Composite_Index"] / base_composite) * 100
+    print(f"   ⚠ No data at 2020-01-01, using first month: {monthly_filtered['Month_Date'].iloc[0]}")
 
 # --- Time series (dual axis)
 
@@ -153,6 +167,15 @@ if 'power_mode' in df.columns:
     # Filter from 2020
     monthly_by_type_filtered = monthly_by_type[monthly_by_type["Month_Date"] >= pd.Timestamp("2020-01-01")].copy()
     
+    # --- INDEX PRICES TO BASE 100 AT 2020-01 FOR EACH TYPE ---
+    for vtype in ['ICE', 'EV']:
+        type_data = monthly_by_type_filtered[monthly_by_type_filtered['vehicle_type'] == vtype].sort_values('Month_Date')
+        if len(type_data) > 0:
+            base_price = type_data.iloc[0]['median_price']
+            monthly_by_type_filtered.loc[monthly_by_type_filtered['vehicle_type'] == vtype, 'median_price_indexed'] = (
+                monthly_by_type_filtered.loc[monthly_by_type_filtered['vehicle_type'] == vtype, 'median_price'] / base_price
+            ) * 100
+    
     # Separate EV and ICE
     ice_data = monthly_by_type_filtered[monthly_by_type_filtered['vehicle_type'] == 'ICE'].sort_values('Month_Date')
     ev_data = monthly_by_type_filtered[monthly_by_type_filtered['vehicle_type'] == 'EV'].sort_values('Month_Date')
@@ -160,32 +183,33 @@ if 'power_mode' in df.columns:
     print(f"   ICE: {len(ice_data)} months, {ice_data['car_count'].sum():.0f} cars")
     print(f"   EV:  {len(ev_data)} months, {ev_data['car_count'].sum():.0f} cars")
     
-    # --- Time series plot with TWO price lines
+    
+    # --- Time series plot with TWO price lines (INDEXED)
     fig, ax1 = plt.subplots(figsize=(16, 7))
     
-    # Plot ICE prices (blue)
+    # Plot ICE prices indexed (blue)
     if len(ice_data) > 0:
         ax1.plot(ice_data["Month_Date"], ice_data["median_price"],
-                 linewidth=2.5, marker="o", ms=4, label="ICE Median Price (CHF)", 
+                 linewidth=2.5, marker="o", ms=4, label="ICE Median Price ", 
                  color='steelblue', alpha=0.8)
     
-    # Plot EV prices (green)
+    # Plot EV prices indexed (green)
     if len(ev_data) > 0:
         ax1.plot(ev_data["Month_Date"], ev_data["median_price"],
-                 linewidth=2.5, marker="^", ms=4, label="EV Median Price (CHF)", 
+                 linewidth=2.5, marker="^", ms=4, label="EV Median Price", 
                  color='green', alpha=0.8)
     
-    ax1.set_ylabel("Median Car Price (CHF)", fontsize=12, fontweight='bold')
+    ax1.set_ylabel("Median Price (CHF)", fontsize=12, fontweight='bold')
     ax1.set_xlabel("Year", fontsize=12)
     ax1.legend(loc='upper left', fontsize=10)
     ax1.grid(True, alpha=0.3)
     
-    # Second axis for Composite Index
+    # Second axis for Composite Index (also indexed)
     ax2 = ax1.twinx()
-    ax2.plot(monthly_filtered["Month_Date"], monthly_filtered["Composite_Index"],
+    ax2.plot(monthly_filtered["Month_Date"], monthly_filtered["Composite_Index_Indexed"],
              linestyle="--", linewidth=2.5, marker="s", ms=4, 
-             label="Composite Index", color="darkred", alpha=0.7)
-    ax2.set_ylabel("Composite Commodity Index (Base 100)", fontsize=12, fontweight='bold', color='darkred')
+             label="Composite Index (Base 100 = 2020-01)", color="darkred", alpha=0.7)
+    ax2.set_ylabel("Composite Commodity Index (Base 100 = 2020-01)", fontsize=12, fontweight='bold', color='darkred')
     ax2.tick_params(axis='y', labelcolor='darkred')
     ax2.legend(loc='upper right', fontsize=10)
     
@@ -194,12 +218,12 @@ if 'power_mode' in df.columns:
     xmax = monthly_by_type_filtered["Month_Date"].max()
     ax1.set_xlim(left=xmin, right=xmax)
     
-    plt.title("Used Car Prices (ICE vs EV) vs Composite Commodity Index (2020–Present)", 
+    plt.title("Used Car Median Prices (ICE vs EV) vs Composite Commodity Index (Base 100 = 2020-01)", 
               fontsize=14, fontweight='bold', pad=20)
     fig.tight_layout()
     plt.savefig(f"{OUTDIR}/RQ1_timeseries.png", dpi=300, bbox_inches="tight")
     plt.close()
-    print("   ✓ Saved: RQ1_timeseries_by_powermode.png")
+    print("   ✓ Saved: RQ1_timeseries.png")
 
 # Scatter
 fig, ax = plt.subplots(figsize=(10,7))
@@ -214,54 +238,6 @@ plt.title('Correlation: Car Prices vs Composite Index')
 fig.tight_layout(); plt.savefig(f"{OUTDIR}/RQ1_scatter.png", dpi=300); plt.close()
 print("   ✓ Saved: RQ1_scatter.png")
 
-# Heatmap (only available cols)
-# ---- Correlation heatmap (clean layout, no index/columns name shown)
-
-# Define row and column structure
-row_vars = ['median_price', 'avg_mileage']
-col_vars = commodity_cols + ['avg_age']  # Commodities + avg_age
-
-# Filter only available columns
-row_vars = [c for c in row_vars if c in monthly.columns]
-col_vars = [c for c in col_vars if c in monthly.columns]
-
-# Calculate correlations between rows and columns
-corr_data = monthly[row_vars + col_vars].corr()
-corr_subset = corr_data.loc[row_vars, col_vars]
-
-# Create figure
-fig, ax = plt.subplots(figsize=(12, 6))
-
-# Create heatmap (no mask needed since it's not square)
-sns.heatmap(corr_subset, annot=True, fmt='.3f', cmap='RdYlGn', 
-            center=0, linewidths=0.8, 
-            cbar_kws={"shrink": 0.8}, vmin=-1, vmax=1, ax=ax)
-
-# Improve labels
-ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right', fontsize=10)
-ax.set_yticklabels(ax.get_yticklabels(), rotation=0, fontsize=10)
-
-# Title
-plt.title('RQ1: Correlation Matrix - Prices vs Commodities & Controls', 
-          fontsize=14, fontweight='bold', pad=20)
-
-plt.tight_layout()
-plt.savefig(f"{OUTDIR}/RQ1_heatmap.png", dpi=300, bbox_inches='tight')
-plt.close()
-print("   ✓ Saved: RQ1_heatmap.png")
-
-
-# tidy ticks
-ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha="right")
-ax.set_yticklabels(ax.get_yticklabels(), rotation=0)
-ax.tick_params(axis='both', labelsize=10)
-
-ax.set_title('Correlation Matrix: Prices, Commodity Indices & Controls', pad=14, fontsize=13)
-
-plt.tight_layout()
-plt.savefig(f"{OUTDIR}/RQ1_heatmap.png", dpi=300, bbox_inches="tight")
-plt.close()
-
 # 8) SUMMARY
 print("\n" + "="*80)
 print("RQ1 ANALYSIS COMPLETE")
@@ -273,3 +249,6 @@ if indiv:
     strongest = max(indiv.items(), key=lambda kv: abs(kv[1]["pearson_r"]))
     print(f"   • Strongest commodity: {strongest[0].replace('_Spot_Monthly_Avg','')} (r={strongest[1]['pearson_r']:+.3f})")
 print(f"Outputs → {OUTDIR}/")
+
+
+df[['Month','Composite_Index']]
