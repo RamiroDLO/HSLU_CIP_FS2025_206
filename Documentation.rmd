@@ -172,35 +172,18 @@ Across the project we apply a standard data-science cleaning cadence: validate d
 # Analysis and Methodology
 
 ## Research Questions
+
+
+# Results and Findings
+[Present key findings, including:[
 1. [Research Question 1]
 2. [Research Question 2]
 3. [Research Question 3]
-
-## Methodology
-[Describe the analytical methods used, including:
-- Statistical methods
-- Machine learning models (if any)
-- Validation techniques]
-
-# Results and Findings
-[Present key findings, including:
 - Summary statistics
 - Visualizations
 - Key insights
 - Limitations]
 
-# Conclusion and Future Work
+# Conclusion and Limitations
 [Provide conclusions and potential future improvements]
 
-# References
-[List all references and data sources]
-
-# Appendices
-## A. Data Dictionary
-[Document the structure and meaning of all data fields]
-
-## B. Troubleshooting
-[Common issues and solutions]
-
-## C. Contributing
-[Guidelines for contributing to the project]
