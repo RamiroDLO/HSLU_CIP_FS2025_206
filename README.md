@@ -1,4 +1,4 @@
-# AutoCommodity Insights
+# Auto & Commodity Insights
 
 A lightweight toolkit to scrape Swiss used car(Autoscout24.ch) listings, pull commodity market api data, and explore how raw material prices influence the second-hand vehicle market for our fictional client AutoHelvetia AG.
 

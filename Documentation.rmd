@@ -1,5 +1,5 @@
 ---
-title: "AutoCommodity Data Collection & Analysis"
+title: "Auto & Commodity Data Collection & Analysis"
 subtitle: "Analyzing the Relationship Between Used Car & Commodity Prices"
 author: "Group 206 — Dongyuan Gao, Ramiro Diez-Liebana, Cyriel Van Helleputte"
 date: "November 2025"
@@ -223,7 +223,18 @@ Eventually things would rebound, making the index climb sharply, while both EV a
   \includegraphics[width=0.85\linewidth]{Analysis/RQ1/RQ1_timeseries.png}
   \end{center}
 
-## RQ2 — Powertrain Sensitivity
+## RQ2 — Do different power modes exhibit different commodity price sensitivities?
+
+This analysis examines whether different vehicle power modes (petrol, diesel, electric) exhibit varying sensitivities to commodity price movements in the used car market. We hypothesized that electric vehicles would show stronger correlations with battery-related materials (lithium, cobalt, nickel, copper), while conventional vehicles would be more sensitive to crude oil and steel prices.
+
+Basic correlations between vehicle prices and commodity prices reveal some patterns, though all correlations remain weak (below 0.20)
+
+   \begin{center}
+   \includegraphics[width=0.60\linewidth]{Analysis/RS2/correlation_heatmap_detailed.png}
+   \end{center}
+
+No statistical evidence supports differential commodity price sensitivity across vehicle power modes in this analysis.
+Vehicle-specific characteristics (mileage, engine power, power mode itself) dominate price determination, while commodity prices show no significant explanatory power. This suggests that used car valuations are either insulated from commodity market fluctuations or that the relationship is more complex than captured by this basic analysis.
 
 ## RQ3 — Brand-Level Differences
 
@@ -265,6 +276,9 @@ For our fictional client, we have the folliwng findings:
 For RQ1, we recommend:
 - **Timing Inventory Purchases**: Monitor battery metal prices (especially copper and cobalt) when acquiring electrified premium brands.
 - **Pricing Models**: Incorporate commodity indices as leading indicators, particularly for luxury and EV segments.
+
+For RQ2, we recommend:
+- **investigating new vehicle markets rather than used vehicle markets may yield clearer insights, as production costs directly reflect current commodity prices while used vehicle valuations are heavily confounded by depreciation, market dynamics, and behavioral factors that obscure commodity price signals.
 
 For RQ3's brand-commodity dynamics, we recommend:
 1. **Strategic Inventory Allocation**:
