@@ -21,7 +21,10 @@ project_scraping_CIP_analysis_car_commodity_price/
 │   ├── API_data_pull/       # API-fetched commodity data & script
 │   ├── clean_data/          # Processed and cleaned datasets & script
 │   └── Scraping/            # Web scraped data and scripts & scraper script
-├── Documentation.pdf        # This documentation file
+├── cip_report_206.pdf       # Official 6 pages documentation file
+├── cip_report_full_pages.pdf # Full 9 pages documentation file
+├── cip_report_full_pages.rmd # Full 9 pages documentation rmd file for generating pdf
+├── cip_report_206.rmd        # Official 6 pages documentation rmd file for generating pdf
 ├── README.md                # Project overview
 ├── AI_Disclosure.md         # Gen AI usage disclosure and guidelines
 ├── requirements.txt         # Project dependencies
@@ -34,7 +37,7 @@ project_scraping_CIP_analysis_car_commodity_price/
 3. Run the analyses under `Analysis/` to reproduce figures and insights.
 
 ## Documentation
-See `Documentation.rmd` for the full project narrative, feasibility notes, and methodology details.
+See `cip_report_full_pages.rmd` for the full project narrative, feasibility notes, and methodology details.
 
 ## Contributions
 Dongyuan Gao: Scraping, Data Processing, Analysis
