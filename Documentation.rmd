@@ -230,7 +230,7 @@ This analysis examines whether different vehicle power modes (petrol, diesel, el
 Basic correlations between vehicle prices and commodity prices reveal some patterns, though all correlations remain weak (below 0.20)
 
    \begin{center}
-   \includegraphics[width=0.60\linewidth]{Analysis/RS2/correlation_heatmap_detailed.png}
+   \includegraphics[width=0.60\linewidth]{Analysis/RQ2/correlation_heatmap_detailed.png}
    \end{center}
 
 No statistical evidence supports differential commodity price sensitivity across vehicle power modes in this analysis.
