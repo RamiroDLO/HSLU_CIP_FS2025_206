@@ -21,22 +21,6 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 \vspace{8pt}
 ```
 
-**Group 206**
-
-```{=latex}
-\vspace{4pt}
-```
-
-*Dongyuan Gao · Ramiro Diez-Liebana · Cyriel Van Helleputte*
-
-```{=latex}
-\vspace{12pt}\hrule\vspace{12pt}
-```
-
-```{=latex}
-\newpage
-```
-
 
 # Project Overview
 
@@ -49,25 +33,11 @@ This project delivers an **advanced data collection** and **anylsis** framework.
 - **Optimize Pricing Strategies**
 - **Gain Competitive Advantage**
 
-## Project Structure
-```
-project_scraping_CIP_analysis_car_commodity_price/
-├── Analysis/                # Analysis notebooks and scripts
-│   ├── RQ1/                 # Research Question 1 script & analysis
-│   ├── RQ2/                 # Research Question 2 script & analysis
-│   └── RQ3/                 # Research Question 3 script & analysis
-├── Data/                    # Data storage
-│   ├── API_data_pull/       # API-fetched commodity data & script
-│   ├── clean_data/          # Processed and cleaned datasets & script
-│   └── Scraping/            # Web scraped data and scripts & scraper script
-├── Documentation.md         # This documentation file
-├── README.md                # Project overview
-├── AI_Disclosure.md         # Gen AI usage disclosure and guidelines
-├── requirements.txt         # Project dependencies
-└── .gitignore
-```
-## Initiall Findings
-
+## Key Findings Summary
+- **Moderate commodity influence overall**: The composite commodity index surged post-2020 while used car prices stayed comparatively stable, yielding only moderate correlations that vary by brand and powertrain—highlighting the role of consumer behavior, policy, and supply chain dynamics.
+- **Powertrain differences remain weak**: Petrol, diesel, and electric vehicles all show correlations below 0.20 with commodity prices, indicating that vehicle-specific characteristics dominate used car valuations and that commodity effects may surface more clearly in new vehicle markets.
+- **Brand-specific sensitivities emerge**: Volvo and Porsche show battery metals positively, while Toyota and Cupra move inversely; copper is the most consistent positive correlate and oil often shows negative ties for ICE-focused brands.
+- **Actionable recommendations**: Monitor copper and cobalt dips before sourcing electrified premium inventory, incorporate commodity indices as indicators for pricing (especially luxury/EV segments), and adjust inventory/pricing strategies—favor resilient brands in commodity bull runs, add surcharges for exposed mass-market models, and keep premium pricing steady.
 
 # Feasibility Research
 
@@ -271,7 +241,7 @@ The results suggest **moderate correlation between commodity prices and the medi
 
 ## Recommendations for our Client
 
-For our fictional client, we have the folliwng findings:
+For our fictional client, we have the following findings:
 
 For RQ1, we recommend:
 - **Timing Inventory Purchases**: Monitor battery metal prices (especially copper and cobalt) when acquiring electrified premium brands.
