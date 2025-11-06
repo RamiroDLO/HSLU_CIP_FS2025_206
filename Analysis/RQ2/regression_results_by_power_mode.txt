@@ -1,0 +1,114 @@
+================================================================================
+REGRESSION RESULTS: PETROL
+================================================================================
+
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:              log_price   R-squared:                       0.633
+Model:                            OLS   Adj. R-squared:                  0.630
+Method:                 Least Squares   F-statistic:                     295.7
+Date:                Thu, 06 Nov 2025   Prob (F-statistic):          3.85e-256
+Time:                        11:49:01   Log-Likelihood:                -820.60
+No. Observations:                1210   AIC:                             1657.
+Df Residuals:                    1202   BIC:                             1698.
+Df Model:                           7                                         
+Covariance Type:            nonrobust                                         
+================================================================================================
+                                   coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------------------------
+Intercept                        9.7947      0.035    283.677      0.000       9.727       9.862
+mileage                       -4.95e-06   2.12e-07    -23.383      0.000   -5.37e-06   -4.53e-06
+engine_power_hp                  0.0034   9.09e-05     37.269      0.000       0.003       0.004
+Lithium_Spot_Monthly_Avg_std    -0.0149      0.126     -0.118      0.906      -0.263       0.233
+Copper_Spot_Monthly_Avg_std      0.0116      0.090      0.129      0.897      -0.164       0.188
+Nickel_Spot_Monthly_Avg_std      0.0043      0.198      0.021      0.983      -0.385       0.394
+WTI_Spot_Monthly_Avg_std         0.0278      0.119      0.234      0.815      -0.205       0.261
+Steel_Spot_Monthly_Avg_std      -0.0274      0.080     -0.341      0.733      -0.185       0.130
+==============================================================================
+Omnibus:                      410.493   Durbin-Watson:                   1.851
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):             4198.901
+Skew:                           1.265   Prob(JB):                         0.00
+Kurtosis:                      11.769   Cond. No.                     2.05e+06
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The condition number is large, 2.05e+06. This might indicate that there are
+strong multicollinearity or other numerical problems.
+
+================================================================================
+REGRESSION RESULTS: DIESEL
+================================================================================
+
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:              log_price   R-squared:                       0.585
+Model:                            OLS   Adj. R-squared:                  0.578
+Method:                 Least Squares   F-statistic:                     77.99
+Date:                Thu, 06 Nov 2025   Prob (F-statistic):           4.86e-70
+Time:                        11:49:01   Log-Likelihood:                -231.45
+No. Observations:                 395   AIC:                             478.9
+Df Residuals:                     387   BIC:                             510.7
+Df Model:                           7                                         
+Covariance Type:            nonrobust                                         
+================================================================================================
+                                   coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------------------------
+Intercept                       10.0871      0.081    124.816      0.000       9.928      10.246
+mileage                      -6.061e-06    3.3e-07    -18.355      0.000   -6.71e-06   -5.41e-06
+engine_power_hp                  0.0038      0.000     12.285      0.000       0.003       0.004
+Lithium_Spot_Monthly_Avg_std     0.1603      0.225      0.713      0.476      -0.282       0.602
+Copper_Spot_Monthly_Avg_std     -0.1173      0.161     -0.730      0.466      -0.433       0.198
+Nickel_Spot_Monthly_Avg_std     -0.0832      0.348     -0.239      0.811      -0.767       0.601
+WTI_Spot_Monthly_Avg_std         0.0281      0.212      0.133      0.895      -0.389       0.445
+Steel_Spot_Monthly_Avg_std       0.0637      0.135      0.473      0.636      -0.201       0.328
+==============================================================================
+Omnibus:                       40.251   Durbin-Watson:                   1.801
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):               64.098
+Skew:                           0.659   Prob(JB):                     1.21e-14
+Kurtosis:                       4.468   Cond. No.                     2.79e+06
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The condition number is large, 2.79e+06. This might indicate that there are
+strong multicollinearity or other numerical problems.
+
+================================================================================
+REGRESSION RESULTS: ELECTRIC
+================================================================================
+
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:              log_price   R-squared:                       0.654
+Model:                            OLS   Adj. R-squared:                  0.640
+Method:                 Least Squares   F-statistic:                     47.56
+Date:                Thu, 06 Nov 2025   Prob (F-statistic):           2.12e-37
+Time:                        11:49:01   Log-Likelihood:                -62.168
+No. Observations:                 184   AIC:                             140.3
+Df Residuals:                     176   BIC:                             166.1
+Df Model:                           7                                         
+Covariance Type:            nonrobust                                         
+================================================================================================
+                                   coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------------------------
+Intercept                       10.0202      0.061    163.775      0.000       9.899      10.141
+mileage                      -7.174e-06   6.22e-07    -11.525      0.000    -8.4e-06   -5.95e-06
+engine_power_hp                  0.0022      0.000     14.675      0.000       0.002       0.002
+Lithium_Spot_Monthly_Avg_std    -0.2824      0.259     -1.091      0.277      -0.793       0.228
+Copper_Spot_Monthly_Avg_std      0.1337      0.182      0.734      0.464      -0.226       0.493
+Nickel_Spot_Monthly_Avg_std      0.5305      0.397      1.335      0.183      -0.254       1.315
+WTI_Spot_Monthly_Avg_std        -0.3968      0.237     -1.675      0.096      -0.864       0.071
+Steel_Spot_Monthly_Avg_std      -0.0363      0.148     -0.246      0.806      -0.328       0.255
+==============================================================================
+Omnibus:                        4.291   Durbin-Watson:                   1.835
+Prob(Omnibus):                  0.117   Jarque-Bera (JB):                3.987
+Skew:                          -0.270   Prob(JB):                        0.136
+Kurtosis:                       3.477   Cond. No.                     1.19e+06
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The condition number is large, 1.19e+06. This might indicate that there are
+strong multicollinearity or other numerical problems.
+
