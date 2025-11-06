@@ -1,6 +1,8 @@
 # Auto & Commodity Insights
 
-A lightweight toolkit to scrape Swiss used car(Autoscout24.ch) listings, pull commodity market api data, and explore how raw material prices influence the second-hand vehicle market for our fictional client AutoHelvetia AG.
+A lightweight toolkit to scrape Swiss used car(Autoscout24.ch) listings, pull commodity market api data, and explore how raw material prices influence the second-hand vehicle market for our fictional client AutoHelvetia AG. 
+
+## Our repo: "https://github.com/RamiroDLO/HSLU_CIP_FS2025_206"
 
 ## Highlights
 - **Web scraping**: Selenium-based scraper for AutoScout24.ch listings.
