@@ -60,9 +60,11 @@ project_scraping_CIP_analysis_car_commodity_price/
 │       ├── Autoscout_Cleaned_Standardized.csv
 │       ├── yahoo_spot_cleaned.csv
 │       └── Final_Merged_Data_RQ3.csv
-├── Exploratory/             # Initial data exploration
-│   └── commodity_exploratory.py
-├── Documentation.md         # Comprehensive project documentation
+├── Reports/                 # Final written deliverables
+│   ├── cip_report_206.rmd    # Final official report 6 pages rmd file
+│   ├── cip_report_206.pdf    # Final official report 6 pages pdf 
+│   ├── cip_report_full_pages.rmd   # Full pages 12 pages rmd file
+│   └── cip_report_full_pages.pdf    # Full pages 12 pages pdf 
 ├── README.md                # This file - Project overview
 ├── AI_Disclosure.md         # GenAI usage disclosure and guidelines
 ├── requirements.txt         # Python dependencies
