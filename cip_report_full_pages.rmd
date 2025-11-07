@@ -21,26 +21,10 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 \vspace{8pt}
 ```
 
-**Group 206**
-
-```{=latex}
-\vspace{4pt}
-```
-
-*Dongyuan Gao · Ramiro Diez-Liebana · Cyriel Van Helleputte*
-
-```{=latex}
-\vspace{12pt}\hrule\vspace{12pt}
-```
-
-```{=latex}
-\newpage
-```
-
 
 # Project Overview
 
-## The Storyline (Potential Business Problem)
+## Business Problem
 The Swiss used car market is highly competitive. Our **fictional client** AutoHelvetia AG, a leading national **used car dealer**, faces the challenge of optimizing their pricing & purchasing strategy. In recent years, commodity prices are volatile and affects pricing of cars. So AutoHelvetia AG delegated the task to us: to understand the relationship between used car prices and commodity prices.
 
 ## Our Solution
@@ -49,36 +33,20 @@ This project delivers an **advanced data collection** and **anylsis** framework.
 - **Optimize Pricing Strategies**
 - **Gain Competitive Advantage**
 
-## Project Structure
-```
-project_scraping_CIP_analysis_car_commodity_price/
-├── Analysis/                # Analysis notebooks and scripts
-│   ├── RQ1/                 # Research Question 1 script & analysis
-│   ├── RQ2/                 # Research Question 2 script & analysis
-│   └── RQ3/                 # Research Question 3 script & analysis
-├── Data/                    # Data storage
-│   ├── API_data_pull/       # API-fetched commodity data & script
-│   ├── clean_data/          # Processed and cleaned datasets & script
-│   └── Scraping/            # Web scraped data and scripts & scraper script
-├── Documentation.md         # This documentation file
-├── README.md                # Project overview
-├── AI_Disclosure.md         # Gen AI usage disclosure and guidelines
-├── requirements.txt         # Project dependencies
-└── .gitignore
-```
-## Initiall Findings
+## Key Findings Summary
+- **Moderate commodity influence overall**: The composite commodity index surged post-2020 while used car prices stayed comparatively stable, yielding only moderate correlations that vary by brand and powertrain—highlighting the role of consumer behavior, policy, and supply chain dynamics.
+- **Powertrain differences remain weak**: Petrol, diesel, and electric vehicles all show correlations below 0.20 with commodity prices, indicating that vehicle-specific characteristics dominate used car valuations and that commodity effects may surface more clearly in new vehicle markets.
+- **Brand-specific sensitivities emerge**: Volvo and Porsche show battery metals positively, while Toyota and Cupra move inversely; copper is the most consistent positive correlate and oil often shows negative ties for ICE-focused brands.
+- **Actionable recommendations**: Monitor copper and cobalt dips before purchasing premium brands, incorporate commodity indices as indicators for pricing (especially luxury/EV segments), and adjust inventory/pricing strategies—favor resilient brands in commodity bull runs.
 
-
-# Feasibility Research
+# Feasibility
 
 ## Ethical Feasibility of Web Scraping AutoScout24.ch
 
 This web scraping project was evaluated for both technical and legal feasibility. We focused on the academic research context and our analysis of AutoScout24.ch's robots.txt file and terms of service indicates that the project operates within acceptable boundaries for academic research purposes.
-- **robots.txt Analysis**:
-  - Allowed: General listing pages without filters
-  - Restricted: User account pages (`/de/account/`, `/de/member/`)
-  - Restricted: Filtered search results with specific URL parameters (e.g., `sort=`, `pricefrom=`)
-  - Restricted: Administrative functions
+**robots.txt Analysis**:
+- Allowed: General listing pages without filters
+- Restricted: User account (`/de/account/`, `/de/member/`), Administrative functions, Filtered search with specific URL parameters (e.g., `sort=`, `pricefrom=`)
 
 ### Technical Feasibility
 - **Data Extraction**: Ethically extracts vehicle specifications, pricing, and listing details with Scraper and Yahoo Finance API, involving selenium and beautifulsoup.
@@ -157,7 +125,7 @@ The core yfinance function used is `yf.download()`. It fetches historical daily 
 
 - **Rate limits and handling**: While it does not have official request limits to call the tool, it still accesses Yahoo, and if the website implements changes or rate limits per IP or token that could be a problem with a more frequent use of the tool.
 
-# Data Transformation and Cleaning
+# Data Cleaning and Transformation
 
 Across the project we apply a standard data-science cleaning cadence: validate dataframe, coerce types, handle missing values with data quality strategies, and normalize key features before exporting analysis-ready datasets.
 
@@ -230,7 +198,7 @@ This analysis examines whether different vehicle power modes (petrol, diesel, el
 Basic correlations between vehicle prices and commodity prices reveal some patterns, though all correlations remain weak (below 0.20)
 
    \begin{center}
-   \includegraphics[width=0.60\linewidth]{Analysis/RS2/correlation_heatmap_detailed.png}
+   \includegraphics[width=0.60\linewidth]{Analysis/RQ2/correlation_heatmap_detailed.png}
    \end{center}
 
 No statistical evidence supports differential commodity price sensitivity across vehicle power modes in this analysis.
@@ -271,16 +239,17 @@ The results suggest **moderate correlation between commodity prices and the medi
 
 ## Recommendations for our Client
 
-For our fictional client, we have the folliwng findings:
+For our fictional client, we have the following findings:
 
 For RQ1, we recommend:
 - **Timing Inventory Purchases**: Monitor battery metal prices (especially copper and cobalt) when acquiring electrified premium brands.
 - **Pricing Models**: Incorporate commodity indices as leading indicators, particularly for luxury and EV segments.
 
 For RQ2, we recommend:
-- **investigating new vehicle markets rather than used vehicle markets may yield clearer insights, as production costs directly reflect current commodity prices while used vehicle valuations are heavily confounded by depreciation, market dynamics, and behavioral factors that obscure commodity price signals.
+- Investigating new vehicle markets rather than used vehicle markets may yield clearer insights, as production costs directly reflect current commodity prices while used vehicle valuations are heavily confounded by depreciation, market dynamics, and behavioral factors that obscure commodity price signals.
 
 For RQ3's brand-commodity dynamics, we recommend:
+
 1. **Strategic Inventory Allocation**:
    - Increase Volvo/Porsche acquisitions when battery metals dip (copper < $8k/ton, cobalt < $30k/ton)
    - Favor Toyota/Cupra stock during commodity bull markets as their pricing resists raw material inflation
